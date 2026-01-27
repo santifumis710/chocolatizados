@@ -1,0 +1,47 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Google Sheets
+credentials.json
+token.json
+client_secret*.json
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Build outputs
+.next/
+out/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+.tmp/
+*.tmp
+.pytest_cache/
+
+# Database
+*.db
+*.sqlite3
+
+# API Keys & Credentials
+credentials.json
+token.json
