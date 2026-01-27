@@ -8,7 +8,7 @@
 "use client";
 
 import React from "react";
-import { colors, spacing, typography } from "@/theme";
+import { colors, spacing } from "@/theme";
 
 interface CartWidgetProps {
   itemCount: number;

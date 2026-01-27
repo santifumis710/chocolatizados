@@ -8,7 +8,6 @@
 
 import React from "react";
 import { CartItem } from "@/hooks/useCart";
-import { openSimpleWhatsAppLink } from "@/utils/whatsapp";
 import { colors, spacing, typography, shadows, borderRadius } from "@/theme";
 
 interface CartSidebarProps {
