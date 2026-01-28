@@ -116,7 +116,7 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
               </p>
             </div>
           ) : (
-            items.map((item, idx) => (
+            items.map((item) => (
               <div
                 key={`${item.product_id}-${item.customization_text || "default"}`}
                 style={{
