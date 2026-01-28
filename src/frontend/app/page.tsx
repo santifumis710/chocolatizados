@@ -185,13 +185,35 @@ export default function Home() {
               }
 
               .hero-background {
-                background-color: #CDAA7D;
+                background-color: #CDAA7D; /* User requested R:206 G:170 B:125 */
                 color: ${colors.white};
                 padding: ${spacing.xxl} 0;
+                position: relative;
+                overflow: hidden; /* Ensure pseudo-element doesn't overflow */
+              }
+
+              /* Use pseudo-element for background image to control opacity independently */
+              .hero-background::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
                 background-image: url('/images/hero-pattern-v2.png'), url('/images/hero-pattern-v2.png');
                 background-size: contain, contain;
                 background-position: left center, right center;
                 background-repeat: no-repeat, no-repeat;
+                opacity: 0.6; /* 60% opacity as requested */
+                z-index: 1;
+              }
+
+              /* Content wrapper to stay on top */
+              .hero-content-wrapper {
+                position: relative;
+                z-index: 2;
+                max-width: 1200px;
+                margin: 0 auto;
               }
               
               .hero-row { display: flex; flex-wrap: wrap; }
@@ -201,7 +223,7 @@ export default function Home() {
               .hero-img { height: auto; width: 100%; display: block; }
 
               @media (max-width: 768px) {
-                .hero-background {
+                .hero-background::before {
                   background-image: url('/images/hero-pattern-v2.png');
                   background-size: cover;
                   background-position: center;
@@ -331,7 +353,7 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="hero-background">
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <div className="hero-content-wrapper">
           {/* Content unchanged, styles handled by class above */}
 
           {/* Row 1: Text Left | Image Right */}
