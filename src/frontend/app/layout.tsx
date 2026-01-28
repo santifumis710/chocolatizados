@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "Chocolatizados - Compra Chocolates Personalizados",
   description: "Lo que quieras decir decilo con chocolates. Compra chocolates personalizados con envío por WhatsApp.",
   icons: {
-    icon: "/logo.jpg",
+    icon: "/favicon.png",
   },
 };
 
