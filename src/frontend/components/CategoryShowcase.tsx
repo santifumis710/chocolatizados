@@ -235,8 +235,8 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
                     maxWidth: "1200px",
                     margin: "0 auto",
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-                    gap: spacing.md,
+                    gridTemplateColumns: "repeat(auto-fit, minmax(110px, 1fr))",
+                    gap: spacing.sm,
                 }}
             >
                 {productTypes.map((type) => (

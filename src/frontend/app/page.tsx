@@ -160,122 +160,30 @@ export default function Home() {
       }}
     >
       {/* Header */}
-      <header
-        style={{
-          backgroundColor: colors.white,
-          borderBottom: `1px solid ${colors.border}`,
-          padding: spacing.lg,
-          position: "sticky",
-          top: 0,
-          zIndex: 100,
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1200px",
-            margin: "0 auto",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: spacing.md,
-            }}
-          >
-            <img
-              src="/logo.jpg"
-              alt="Chocolatizados Logo"
-              style={{
-                height: "75px",
-                width: "auto",
-                borderRadius: "8px",
-              }}
-            />
-            <div>
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: "28px",
-                  color: colors.secondary,
-                  fontFamily: typography.fontFamilySerif,
-                  fontStyle: "italic",
-                  fontWeight: "normal",
-                }}
-              >
-                "Lo que quieras decir, decilo con chocolates"
-              </p>
-            </div>
-          </div>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+              /* Estilos Globales para Móvil */
+              @media (max-width: 768px) {
+                .desktop-only { display: none !important; }
+                .mobile-only { display: block !important; }
+                
+                /* Grid de Productos: 2 columnas en móvil */
+                .product-grid {
+                   grid-template-columns: repeat(2, 1fr) !important;
+                   gap: ${spacing.sm} !important;
+                }
+              }
 
-          <div style={{ display: "flex", alignItems: "center", gap: spacing.md }}>
-            {/* Social Icons */}
-            <div style={{ display: "flex", gap: spacing.md }}>
-              <SocialIcon href="https://www.instagram.com/chocolatizados/">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="30"
-                  height="30"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                </svg>
-              </SocialIcon>
-              <SocialIcon href={`https://api.whatsapp.com/send?phone=5493426158358&text=Hola%20Marie,%20quiero%20chocolates!`}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="30"
-                  height="30"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-                </svg>
-              </SocialIcon>
-            </div>
+              @media (min-width: 769px) {
+                .desktop-only { display: block !important; }
+                .mobile-only { display: none !important; }
+                
+                .product-grid {
+                   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                   gap: ${spacing.lg};
+                }
+              }
 
-            <CartWidget itemCount={itemCount} onClick={() => setCartOpen(!cartOpen)} />
-          </div>
-        </div>
-      </header>
-
-      {/* Hero Section */}
-      <section className="hero-background">
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-
-          {/* Row 1: Text Left | Image Right (Desktop) -> Image Top | Text Bottom (Mobile) */}
-          <div style={{
-            display: "flex",
-            flexWrap: "wrap",
-            flexDirection: "row-reverse", // Default for mobile to put img on top if we assume img is 2nd in DOM? No, let's use standard order + media query logic or simple stacking.
-            // Actually, simpler: Desktop = Row. Mobile = Column-Reverse (if Img is 2nd child).
-            // But inline styles are hard for media queries.
-            // Trick: use `flex-wrap: wrap`.
-            // Item 1 (Text): flex-basis: 50% (desktop), 100% (mobile). Order 2 (mobile), Order 1 (desktop)?
-            // Without media queries in inline styles, we rely on natural wrapping.
-            // Left Item (Text) and Right Item (Image).
-            // If we want Image Top on Mobile, we put Image FIRST in DOM, then Text.
-            // Then on Desktop: we force Text to be Left (Order 1) and Image Right (Order 2).
-            // But we can't switch `flex-direction` without media query.
-            // Workaround: We will use a standard CSS class or insert a <style> tag.
-          }}>
-            <style dangerouslySetInnerHTML={{
-              __html: `
               .hero-background {
                 background-color: #CDAA7D;
                 color: ${colors.white};
@@ -305,63 +213,166 @@ export default function Home() {
               }
             `}} />
 
-            {/* Row 1 */}
-            <div className="hero-row" style={{ flexDirection: "row-reverse" }}>
-              {/* Image (Right on Desktop, Top on Mobile because it's first in DOM? NO wait.) 
-                   If row-reverse, the LAST element is LEFT. The FIRST element is RIGHT.
-                   DOM Element 1: Image. (Right on Desktop).
-                   DOM Element 2: Text. (Left on Desktop).
-                   
-                   Mobile (Column): Image (Top), Text (Bottom).
-                   So DOM order: Image, Text.
-                   Desktop: flex-direction: row-reverse. -> Text (Left), Image (Right).
-                   Mobile: flex-direction: column. -> Image (Top), Text (Bottom).
-               */}
-              <div className="hero-col">
-                <img src="/images/products/hero-tabletas.jpg" alt="Chocolate artesanal" className="hero-img" style={{ borderRadius: "16px" }} />
-              </div>
-              <div className="hero-col hero-text-left">
-                <p style={{
-                  fontSize: typography.sizes.lg,
-                  lineHeight: 1.8,
-                  fontStyle: "italic",
-                  textAlign: "justify",
-                  textIndent: spacing.xl,
-                  margin: 0
-                }}>
-                  Cuando una persona o empresa quiere agasajar a sus invitados o clientes, nada mejor que hacerlo con un producto tentador como es el chocolate... personalizando su envoltorio.
+      {/* Header */}
+      <header
+        style={{
+          backgroundColor: colors.white,
+          borderBottom: `1px solid ${colors.border}`,
+          padding: spacing.md,
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "1200px",
+            margin: "0 auto",
+          }}
+        >
+          {/* Top Row: Logo & Icons */}
+          <div style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%"
+          }}>
+            {/* Left: Logo + Desktop Slogan */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: spacing.md,
+              }}
+            >
+              <img
+                src="/logo.jpg"
+                alt="Chocolatizados Logo"
+                style={{
+                  height: "60px", // Slightly smaller for mobile safety
+                  width: "auto",
+                  borderRadius: "8px",
+                }}
+              />
+              {/* Slogan Desktop */}
+              <div className="desktop-only">
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: "24px",
+                    color: colors.secondary,
+                    fontFamily: typography.fontFamilySerif,
+                    fontStyle: "italic",
+                    fontWeight: "normal",
+                  }}
+                >
+                  "Lo que quieras decir, decilo con chocolates"
                 </p>
               </div>
             </div>
 
-            {/* Row 2 */}
-            <div className="hero-row" style={{ flexDirection: "row" }}>
-              {/* DOM Element 1: Image. (Left on Desktop).
-                   DOM Element 2: Text. (Right on Desktop).
-                   
-                   Mobile (Column): Image (Top), Text (Bottom).
-                   So DOM order: Image, Text.
-                   Desktop: flex-direction: row. -> Image (Left), Text (Right).
-                   Mobile: flex-direction: column. -> Image (Top), Text (Bottom).
-               */}
-              <div className="hero-col">
-                <img src="/images/products/hero-bombones.jpg" alt="Bombones premium" className="hero-img" style={{ borderRadius: "16px" }} />
-              </div>
-              <div className="hero-col hero-text-right">
-                <p style={{
-                  fontSize: typography.sizes.lg,
-                  lineHeight: 1.8,
-                  fontStyle: "italic",
-                  textAlign: "justify",
-                  textIndent: spacing.xl,
-                  margin: 0
-                }}>
-                  Elegí chocolate de verdad! El chocolate genuino y el baño de reposteria pueden parecer similares a primera vista, pero sus diferencias son significativas, podés reconocerlo porque el verdadero chocolate no deja una sensación de grasitud en el paladar, es rígido, crocante y brilloso, tiene un sabor y aroma diferencial... y se funde de manera agradable en tu boca.
-                </p>
-              </div>
-            </div>
+            {/* Right: Social Icons */}
+            <div style={{ display: "flex", alignItems: "center", gap: spacing.sm }}>
+              <SocialIcon href="https://www.instagram.com/chocolatizados/">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+              </SocialIcon>
+              <SocialIcon href={`https://api.whatsapp.com/send?phone=5493426158358&text=Hola%20Marie,%20quiero%20chocolates!`}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                </svg>
+              </SocialIcon>
 
+              <CartWidget itemCount={itemCount} onClick={() => setCartOpen(!cartOpen)} />
+            </div>
           </div>
+
+          {/* Bottom Row: Mobile Slogan */}
+          <div className="mobile-only" style={{ marginTop: spacing.sm, textAlign: "center" }}>
+            <p
+              style={{
+                margin: 0,
+                fontSize: "16px",
+                color: colors.secondary,
+                fontFamily: typography.fontFamilySerif,
+                fontStyle: "italic",
+                fontWeight: "normal",
+              }}
+            >
+              "Lo que quieras decir, decilo con chocolates"
+            </p>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="hero-background">
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          {/* Content unchanged, styles handled by class above */}
+
+          {/* Row 1: Text Left | Image Right */}
+          <div className="hero-row" style={{ flexDirection: "row-reverse" }}>
+            {/* ... existing hero HTML ... */}
+            <div className="hero-col">
+              <img src="/images/products/hero-tabletas.jpg" alt="Chocolate artesanal" className="hero-img" style={{ borderRadius: "16px" }} />
+            </div>
+            <div className="hero-col hero-text-left">
+              <p style={{
+                fontSize: typography.sizes.lg,
+                lineHeight: 1.8,
+                fontStyle: "italic",
+                textAlign: "justify",
+                textIndent: spacing.xl,
+                margin: 0
+              }}>
+                Cuando una persona o empresa quiere agasajar a sus invitados o clientes, nada mejor que hacerlo con un producto tentador como es el chocolate... personalizando su envoltorio.
+              </p>
+            </div>
+          </div>
+
+          {/* Row 2 */}
+          <div className="hero-row" style={{ flexDirection: "row" }}>
+            <div className="hero-col">
+              <img src="/images/products/hero-bombones.jpg" alt="Bombones premium" className="hero-img" style={{ borderRadius: "16px" }} />
+            </div>
+            <div className="hero-col hero-text-right">
+              <p style={{
+                fontSize: typography.sizes.lg,
+                lineHeight: 1.8,
+                fontStyle: "italic",
+                textAlign: "justify",
+                textIndent: spacing.xl,
+                margin: 0
+              }}>
+                Elegí chocolate de verdad! El chocolate genuino y el baño de reposteria pueden parecer similares a primera vista, pero sus diferencias son significativas, podés reconocerlo porque el verdadero chocolate no deja una sensación de grasitud en el paladar, es rígido, crocante y brilloso, tiene un sabor y aroma diferencial... y se funde de manera agradable en tu boca.
+              </p>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -425,13 +436,7 @@ export default function Home() {
               No hay productos disponibles en esta categoría.
             </div>
           ) : (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-                gap: spacing.lg,
-              }}
-            >
+            <div className="product-grid" style={{ display: "grid" }}>
               {filteredProducts.map((product) => (
                 <ProductCard
                   key={product.id}
