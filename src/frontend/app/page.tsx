@@ -204,7 +204,7 @@ export default function Home() {
                 background-size: contain, contain;
                 background-position: left center, right center;
                 background-repeat: no-repeat, no-repeat;
-                opacity: 0.6; /* 60% opacity as requested */
+                opacity: 0.3; /* Lower opacity as requested */
                 z-index: 1;
               }
 
