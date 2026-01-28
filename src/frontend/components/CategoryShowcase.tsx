@@ -151,14 +151,26 @@ const CategoryCard = ({
                     {type.title}
                 </h3>
 
-                <div style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    fontSize: typography.sizes.sm,
-                    color: colors.textLight,
-                    fontWeight: "500",
-                    marginBottom: spacing.md
-                }}>
+                {/* Details: Weight & Size */}
+                <style dangerouslySetInnerHTML={{
+                    __html: `
+                    .category-card-details {
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: ${typography.sizes.sm};
+                        color: ${colors.textLight};
+                        font-weight: 500;
+                        margin-bottom: ${spacing.md};
+                    }
+                    @media (max-width: 768px) {
+                        .category-card-details {
+                            flex-direction: column;
+                            gap: ${spacing.xs};
+                            align-items: flex-start;
+                        }
+                    }
+                `}} />
+                <div className="category-card-details">
                     <span>⚖️ {type.weight}</span>
                     <span>📏 {type.size}</span>
                 </div>
