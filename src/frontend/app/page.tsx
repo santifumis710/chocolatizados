@@ -404,14 +404,20 @@ export default function Home() {
         onSelectCategory={setSelectedCategory}
       />
 
-      {/* Main Content */}
-      < main
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          padding: spacing.xl,
-        }}
-      >
+      <style dangerouslySetInnerHTML={{
+        __html: `
+        .main-content {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: ${spacing.xl};
+        }
+        @media (max-width: 768px) {
+          .main-content {
+            padding: ${spacing.sm} !important; /* Reduced padding for wider cards */
+          }
+        }
+      `}} />
+      < main className="main-content">
         <div style={{ marginBottom: spacing.lg }}>
           <h2 style={{ color: colors.primary, fontSize: typography.sizes.xl, fontWeight: "900" }}>
             {selectedCategory ? `Catálogo: ${selectedCategory}` : "Catálogo Completo"}
