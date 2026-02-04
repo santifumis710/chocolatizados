@@ -72,6 +72,17 @@ export default function AdminDashboard() {
         }
     };
 
+    const toggleVisibility = async (product: any) => {
+        try {
+            const updatedProduct = { ...product, is_visible: !product.is_visible };
+            await updateProduct(product.id, updatedProduct);
+            loadProducts();
+        } catch (e) {
+            alert('Error actualizando visibilidad');
+            console.error(e);
+        }
+    };
+
     if (loading) return <div style={{ padding: spacing.xl }}>Cargando...</div>;
 
     return (
@@ -154,6 +165,7 @@ export default function AdminDashboard() {
                                     <th style={{ padding: spacing.sm }}>Imagen</th>
                                     <th style={{ padding: spacing.sm }}>Nombre</th>
                                     <th style={{ padding: spacing.sm }}>Precio</th>
+                                    <th style={{ padding: spacing.sm }}>Visible</th>
                                     <th style={{ padding: spacing.sm }}>Acciones</th>
                                 </tr>
                             </thead>
@@ -166,6 +178,20 @@ export default function AdminDashboard() {
                                         </td>
                                         <td style={{ padding: spacing.sm, fontWeight: 'bold' }}>{p.name}</td>
                                         <td style={{ padding: spacing.sm }}>${p.price.toLocaleString('es-AR')}</td>
+                                        <td style={{ padding: spacing.sm }}>
+                                            <button
+                                                onClick={() => toggleVisibility(p)}
+                                                style={{
+                                                    background: 'none',
+                                                    border: 'none',
+                                                    cursor: 'pointer',
+                                                    fontSize: '1.2rem'
+                                                }}
+                                                title={p.is_visible !== false ? "Ocultar" : "Mostrar"}
+                                            >
+                                                {p.is_visible !== false ? '👁️' : '🔒'}
+                                            </button>
+                                        </td>
                                         <td style={{ padding: spacing.sm }}>
                                             <button onClick={() => handleEditClick(p)} style={{ marginRight: spacing.sm, cursor: 'pointer', color: 'blue', background: 'none', border: 'none' }}>
                                                 ✏️ Editar

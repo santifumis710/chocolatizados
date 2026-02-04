@@ -9,7 +9,7 @@ import { ProductDetail } from "@/components/ProductDetail";
 import { CategoryShowcase } from "@/components/CategoryShowcase";
 import { useCart, CartItem } from "@/hooks/useCart";
 import { colors, spacing, typography } from "@/theme";
-import { createOrder } from "@/services/api";
+import { createOrder, fetchProducts } from "@/services/api";
 
 interface Product {
   id: number;
@@ -24,6 +24,7 @@ interface Product {
   options?: string;
   min_quantity?: number;
   image_position?: string;
+  is_visible?: boolean;
 }
 
 const SocialIcon = ({ href, children }: { href: string; children: React.ReactNode }) => {
@@ -62,11 +63,12 @@ export default function Home() {
   const { cart, addItem, removeItem, updateQuantity, clearCart, itemCount, total } = useCart();
 
   useEffect(() => {
-    // Cargar productos desde products.json
-    fetch("/products.json")
-      .then((res) => res.json())
-      .then((data) => {
-        setProducts(data);
+    // Cargar productos desde la API
+    fetchProducts()
+      .then((data: Product[]) => {
+        // Filter out invisible products
+        const visibleProducts = data.filter(p => p.is_visible !== false);
+        setProducts(visibleProducts);
         setLoading(false);
       })
       .catch((err) => {
