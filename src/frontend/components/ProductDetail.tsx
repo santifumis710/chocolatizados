@@ -324,6 +324,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
         <div
           style={{
             padding: spacing.lg,
+            paddingBottom: "calc(20px + env(safe-area-inset-bottom))", // Lift up for mobile bars
             borderTop: `1px solid ${colors.border}`,
             backgroundColor: colors.background,
           }}
