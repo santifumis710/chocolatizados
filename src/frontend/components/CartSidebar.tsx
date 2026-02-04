@@ -276,6 +276,7 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
         <div
           style={{
             padding: spacing.lg,
+            paddingBottom: "calc(40px + env(safe-area-inset-bottom))", // Extra spacing + Mobile Safe Area
             borderTop: `1px solid ${colors.border}`,
             backgroundColor: colors.background,
           }}
@@ -313,16 +314,6 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
               cursor: items.length === 0 ? "not-allowed" : "pointer",
               transition: "background-color 0.3s ease",
             }}
-            onMouseEnter={(e) => {
-              if (items.length > 0) {
-                e.currentTarget.style.backgroundColor = "#8B3D32";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (items.length > 0) {
-                e.currentTarget.style.backgroundColor = colors.primary;
-              }
-            }}
           >
             📲 Continuar al checkout
           </button>
@@ -340,12 +331,6 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
               fontSize: typography.sizes.base,
               cursor: "pointer",
               transition: "all 0.3s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.background;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.white;
             }}
           >
             Seguir comprando
