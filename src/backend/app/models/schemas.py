@@ -29,6 +29,7 @@ class Product(BaseModel):
     description: Optional[str] = None
     image_url: Optional[str] = None
     allows_customization: bool = False
+    is_visible: bool = True
     
     class Config:
         json_schema_extra = {
