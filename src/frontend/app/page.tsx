@@ -85,9 +85,8 @@ export default function Home() {
     : products;
 
   const handleAddToCart = (item: Omit<CartItem, "quantity">, quantity: number) => {
-    for (let i = 0; i < quantity; i++) {
-      addItem(item);
-    }
+    addItem({ ...item, quantity });
+    setCartOpen(true); // Open cart sidebar for immediate feedback
   };
 
   const handleCheckout = () => {

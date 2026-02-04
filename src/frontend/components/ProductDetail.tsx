@@ -342,12 +342,6 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
               cursor: "pointer",
               transition: "background-color 0.3s ease",
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#8B3D32";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.primary;
-            }}
           >
             🛒 Agregar al carrito
           </button>
@@ -364,12 +358,6 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
               fontSize: typography.sizes.base,
               cursor: "pointer",
               transition: "all 0.3s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.background;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.white;
             }}
           >
             Cerrar

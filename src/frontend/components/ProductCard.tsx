@@ -47,16 +47,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         alignItems: "center",
         overflow: "hidden", // Ensure image stays within border radius
       }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = colors.white; // Keep white background
-        e.currentTarget.style.transform = "translateY(-4px)";
-        e.currentTarget.style.boxShadow = shadows.md;
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = colors.white;
-        e.currentTarget.style.transform = "translateY(0)";
-        e.currentTarget.style.boxShadow = shadows.sm;
-      }}
     >
       {/* Product Image - Full Width/Bleed */}
       <div
