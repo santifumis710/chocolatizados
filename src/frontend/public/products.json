@@ -7,7 +7,7 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Caja por 120 unidades",
-    "image_url": "/images/products/10-simples-chicos-120-custom.jpg",
+    "image_url": "/images/products/simples-chicos-120-pastel.png",
     "allows_customization": true,
     "image_position": "center 70%"
   },
@@ -19,7 +19,7 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Caja por 250 unidades",
-    "image_url": "/images/products/11-simples-chicos-250-custom.jpg",
+    "image_url": "/images/products/simples-chicos-250-pastel.png",
     "options": null,
     "allows_customization": true,
     "min_quantity": 1
@@ -32,7 +32,7 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Bolsita de tul con 5 unidades. Mínimo 10 pedidos.",
-    "image_url": "/images/products/simples-chicos-tul-5.jpg",
+    "image_url": "/images/products/simples-chicos-tul-5-pastel.png",
     "options": null,
     "allows_customization": false,
     "min_quantity": 10,
@@ -46,7 +46,7 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Caja por 26 unidades",
-    "image_url": "/images/products/simples-grandes-26-custom.jpg",
+    "image_url": "/images/products/simples-grandes-26-pastel.png",
     "options": null,
     "allows_customization": true,
     "min_quantity": 1
@@ -59,7 +59,7 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Caja por 64 unidades",
-    "image_url": "/images/products/14-simples-grandes-64-custom.jpg",
+    "image_url": "/images/products/simples-grandes-64-pastel.png",
     "options": null,
     "allows_customization": true,
     "min_quantity": 1
@@ -72,7 +72,7 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Caja por 140 unidades",
-    "image_url": "/images/products/15-simples-grandes-140-custom.jpg",
+    "image_url": "/images/products/simples-grandes-140-pastel.png",
     "options": null,
     "allows_customization": true,
     "min_quantity": 1
@@ -85,7 +85,7 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Bolsita de tul con 2 unidades. Mínimo 15 pedidos.",
-    "image_url": "/images/products/16-simples-grandes-tul-2.jpg",
+    "image_url": "/images/products/simples-grandes-tul-8-pastel.png",
     "options": null,
     "allows_customization": false,
     "min_quantity": 15
@@ -98,7 +98,7 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Bolsita de tul con 8 unidades. Mínimo 8 pedidos.",
-    "image_url": "/images/products/simples-grandes-tul-8.jpg",
+    "image_url": "/images/products/simples-grandes-tul-8-pastel.png",
     "options": null,
     "allows_customization": false,
     "min_quantity": 8,
@@ -112,7 +112,7 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Caja por 9 unidades",
-    "image_url": "/images/products/19-tabletas-chicas-9-custom.jpg",
+    "image_url": "/images/products/tabletas-chicas-9-pastel.png",
     "options": null,
     "allows_customization": false,
     "min_quantity": 1
@@ -125,7 +125,7 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Bolsita de tul con 2 unidades",
-    "image_url": "/images/products/20-tabletas-chicas-tul-2.jpg",
+    "image_url": "/images/products/simples-chicos-tul-5-pastel.png",
     "options": null,
     "allows_customization": false,
     "min_quantity": 1
@@ -138,7 +138,7 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Caja por 25 unidades",
-    "image_url": "/images/products/21-bombones-rellenos-25-custom.jpg",
+    "image_url": "/images/products/bombones-rellenos-25-pastel.png",
     "options": null,
     "allows_customization": true,
     "min_quantity": 1
@@ -151,7 +151,7 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Caja por 60 unidades",
-    "image_url": "/images/products/22-bombones-rellenos-60-custom.jpg",
+    "image_url": "/images/products/bombones-rellenos-60-pastel.png",
     "options": null,
     "allows_customization": true,
     "min_quantity": 1
@@ -164,7 +164,7 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Bolsitas de tul con 2 unidades. Mínimo 15 pedidos.",
-    "image_url": "/images/products/bombones-rellenos-tul-2.jpg",
+    "image_url": "/images/products/bombones-rellenos-tul-2-pastel.png",
     "options": null,
     "allows_customization": false,
     "min_quantity": 15
@@ -177,7 +177,7 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Bolsitas de tul con 8 unidades. Mínimo 8 pedidos.",
-    "image_url": "/images/products/bombones-rellenos-tul-8.jpg",
+    "image_url": "/images/products/bombones-rellenos-tul-8-pastel.png",
     "options": null,
     "allows_customization": false,
     "min_quantity": 8,
@@ -191,7 +191,7 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Caja por 6 unidades",
-    "image_url": "/images/products/25-barritas-rellenas-6.jpg",
+    "image_url": "/images/products/barritas-rellenas-6-pastel.png",
     "options": null,
     "allows_customization": true,
     "min_quantity": 1
@@ -204,7 +204,7 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Tableta de chocolate individual",
-    "image_url": "/images/products/tableta-leche.jpg",
+    "image_url": "/images/products/tableta-individual-pastel.png",
     "options": null,
     "allows_customization": false,
     "min_quantity": 1
