@@ -121,8 +121,9 @@ export default function Home() {
 
       const whatsappUrl = `https://api.whatsapp.com/send?phone=5493426158358&text=${encodeURIComponent(messageContent)}`;
 
-      // 3. Open WhatsApp
-      window.open(whatsappUrl, '_blank');
+      // 3. Open WhatsApp (Redirect current tab)
+      // On mobile, window.open is often blocked if not direct user action
+      window.location.href = whatsappUrl;
 
       // 4. Clear Cart and Close
       clearCart();
@@ -147,7 +148,7 @@ export default function Home() {
         `${moneyBagEmoji} Total: $${total.toLocaleString('es-AR', { minimumFractionDigits: 2 })}\n\n` +
         `${bustInSilhouetteEmoji} Nombre: ${data.customer_name}`;
 
-      window.open(`https://api.whatsapp.com/send?phone=5493426158358&text=${encodeURIComponent(messageContent)}`, '_blank');
+      window.location.href = `https://api.whatsapp.com/send?phone=5493426158358&text=${encodeURIComponent(messageContent)}`;
       clearCart();
       setCheckoutOpen(false);
     }
