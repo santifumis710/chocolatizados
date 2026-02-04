@@ -2,12 +2,14 @@ export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000
 
 export const checkAuth = (): boolean => {
     if (typeof window === 'undefined') return false;
-    return localStorage.getItem('adminToken') === 'admin123'; // Hardcoded for prototype
+    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'admin123';
+    return localStorage.getItem('adminToken') === adminPassword;
 };
 
 export const login = (password: string): boolean => {
-    if (password === 'admin123') {
-        localStorage.setItem('adminToken', 'admin123');
+    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'admin123';
+    if (password === adminPassword) {
+        localStorage.setItem('adminToken', adminPassword);
         return true;
     }
     return false;
