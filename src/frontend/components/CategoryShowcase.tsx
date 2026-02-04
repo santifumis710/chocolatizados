@@ -78,11 +78,51 @@ const CategoryCard = ({
             if (selectedFlavor === "milk") return "/images/products/tableta-leche.jpg";
         }
         if (type.id === "Bombones Rellenos") {
-            if (selectedFlavor === "milk") return "/images/products/bombones-rellenos.jpg";
-            return null; // No image for other flavors yet
+            if (selectedFlavor === "semi") return "/images/products/bombones-rellenos-semi.jpg";
+            if (selectedFlavor === "white") return "/images/products/bombones-rellenos-blanco.jpg";
+            if (selectedFlavor === "milk") return "/images/products/bombones-rellenos-leche.jpg";
+        }
+        if (type.id === "Simples Chicos") {
+            if (selectedFlavor === "semi") return "/images/products/simples-chicos-semi.jpg";
+            if (selectedFlavor === "white") return "/images/products/simples-chicos-blanco.jpg";
+            if (selectedFlavor === "milk") return "/images/products/simples-chicos-leche.jpg";
+        }
+        if (type.id === "Simples Grandes") {
+            if (selectedFlavor === "semi") return "/images/products/simples-grandes-semi.jpg";
+            if (selectedFlavor === "white") return "/images/products/simples-grandes-blanco.jpg";
+            if (selectedFlavor === "milk") return "/images/products/simples-grandes-leche.jpg";
+        }
+        if (type.id === "Tabletas Chicas") {
+            if (selectedFlavor === "semi") return "/images/products/tabletas-chicas-semi.jpg";
+            if (selectedFlavor === "white") return "/images/products/tabletas-chicas-blanco.jpg";
+            if (selectedFlavor === "milk") return "/images/products/tabletas-chicas-leche.jpg";
+        }
+        if (type.id === "Barritas Rellenas") {
+            if (selectedFlavor === "semi") return "/images/products/barritas-rellenas-semi.jpg";
+            if (selectedFlavor === "white") return "/images/products/barritas-rellenas-blanco.jpg";
+            // Milk is missing, return null to show placeholder
+            if (selectedFlavor === "milk") return null;
         }
         return null; // Placeholder for others
     };
+
+    const getObjectPosition = () => {
+        if (type.id === "Simples Chicos") {
+            if (selectedFlavor === "semi" || selectedFlavor === "milk") return "center 65%";
+        }
+        if (type.id === "Simples Grandes") {
+            // "move it a little to the left" -> object-position: left center (or maybe 30% center?)
+            // Let's try 30% 50% to shift focus left.
+            if (selectedFlavor === "semi" || selectedFlavor === "milk") return "30% 50%";
+        }
+        if (type.id === "Barritas Rellenas") {
+            // "move above" -> center 75% (moved from 65%)
+            return "center 75%";
+        }
+        return "center center";
+    };
+
+
 
     // Reset error when flavor or type changes
     React.useEffect(() => {
@@ -124,7 +164,13 @@ const CategoryCard = ({
                         key={imagePath} // Force remount on path change
                         src={imagePath}
                         alt={`${type.title} ${selectedFlavor}`}
-                        style={{ width: "100%", height: "100%", objectFit: "cover", transition: "src 0.3s ease" }}
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            objectPosition: getObjectPosition(),
+                            transition: "src 0.3s ease"
+                        }}
                         onError={() => setImgError(true)}
                     />
                 ) : (
@@ -214,11 +260,33 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
 }) => {
     return (
         <section
+            className="showcase-section"
             style={{
-                padding: spacing.xl,
                 backgroundColor: colors.white,
             }}
         >
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                .showcase-section {
+                    padding: ${spacing.xl};
+                }
+                .showcase-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                    gap: ${spacing.sm};
+                    max-width: 1200px;
+                    margin: 0 auto;
+                }
+                @media (max-width: 768px) {
+                    .showcase-section {
+                        padding: ${spacing.md};
+                    }
+                    /* Ensure 2 columns on smaller mobile screens */
+                    .showcase-grid {
+                        grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+                    }
+                }
+            `}} />
             <div
                 style={{
                     maxWidth: "1200px",
@@ -242,15 +310,7 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
                 </p>
             </div>
 
-            <div
-                style={{
-                    maxWidth: "1200px",
-                    margin: "0 auto",
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-                    gap: spacing.sm,
-                }}
-            >
+            <div className="showcase-grid">
                 {productTypes.map((type) => (
                     <CategoryCard
                         key={type.id}

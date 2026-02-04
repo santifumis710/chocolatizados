@@ -8,7 +8,8 @@
     "dimensions": "",
     "description": "Caja por 120 unidades",
     "image_url": "/images/products/10-simples-chicos-120-custom.jpg",
-    "allows_customization": true
+    "allows_customization": true,
+    "image_position": "center 70%"
   },
   {
     "id": 11,
@@ -25,16 +26,17 @@
   },
   {
     "id": 12,
-    "name": "Simples Chicos (Bolsita Tul x2)",
+    "name": "Simples Chicos (Bolsita Tul x5)",
     "price": 2800.0,
     "category": "Simples Chicos",
     "weight_g": "",
     "dimensions": "",
-    "description": "Bolsita de tul con 2 unidades. Mínimo 10 pedidos.",
-    "image_url": "/images/products/12-simples-chicos-tul-2.jpg",
+    "description": "Bolsita de tul con 5 unidades. Mínimo 10 pedidos.",
+    "image_url": "/images/products/simples-chicos-tul-5.jpg",
     "options": null,
     "allows_customization": false,
-    "min_quantity": 10
+    "min_quantity": 10,
+    "image_position": "center 70%"
   },
   {
     "id": 13,
@@ -96,10 +98,11 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Bolsita de tul con 8 unidades. Mínimo 8 pedidos.",
-    "image_url": "/images/products/17-simples-grandes-tul-8.jpg",
+    "image_url": "/images/products/simples-grandes-tul-8.jpg",
     "options": null,
     "allows_customization": false,
-    "min_quantity": 8
+    "min_quantity": 8,
+    "image_position": "center 70%"
   },
   {
     "id": 19,
@@ -161,7 +164,7 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Bolsitas de tul con 2 unidades. Mínimo 15 pedidos.",
-    "image_url": "/images/products/bombones-rellenos.jpg",
+    "image_url": "/images/products/bombones-rellenos-tul-2.jpg",
     "options": null,
     "allows_customization": false,
     "min_quantity": 15
@@ -174,10 +177,11 @@
     "weight_g": "",
     "dimensions": "",
     "description": "Bolsitas de tul con 8 unidades. Mínimo 8 pedidos.",
-    "image_url": "/images/products/bombones-rellenos.jpg",
+    "image_url": "/images/products/bombones-rellenos-tul-8.jpg",
     "options": null,
     "allows_customization": false,
-    "min_quantity": 8
+    "min_quantity": 8,
+    "image_position": "center 70%"
   },
   {
     "id": 25,

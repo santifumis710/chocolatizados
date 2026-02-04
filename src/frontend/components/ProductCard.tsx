@@ -15,6 +15,7 @@ interface ProductCardProps {
   name: string;
   price: number;
   image_url?: string;
+  imagePosition?: string;
   onSelect: (id: number) => void;
 }
 
@@ -23,6 +24,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   name,
   price,
   image_url,
+  imagePosition,
   onSelect,
 }) => {
   const [imgError, setImgError] = React.useState(false);
@@ -32,7 +34,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       onClick={() => onSelect(id)}
       style={{
         width: "100%",
-        padding: spacing.lg,
+        padding: 0, // Remove padding to let image fill the card
         backgroundColor: colors.white,
         border: `2px solid ${colors.secondary}`,
         borderRadius: borderRadius.lg,
@@ -43,35 +45,41 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        overflow: "hidden", // Ensure image stays within border radius
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = colors.background;
+        e.currentTarget.style.backgroundColor = colors.white; // Keep white background
+        e.currentTarget.style.transform = "translateY(-4px)";
         e.currentTarget.style.boxShadow = shadows.md;
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.backgroundColor = colors.white;
+        e.currentTarget.style.transform = "translateY(0)";
         e.currentTarget.style.boxShadow = shadows.sm;
       }}
     >
-      {/* Product Image */}
+      {/* Product Image - Full Width/Bleed */}
       <div
         style={{
           width: "100%",
-          height: "200px",
-          marginBottom: spacing.md,
+          height: "200px", // Fixed height for consistency, or use aspect-ratio
           backgroundColor: "#f0f0f0",
-          borderRadius: borderRadius.md,
-          overflow: "hidden",
           display: "flex",
           alignItems: "center",
-          justifyContent: "center"
+          justifyContent: "center",
+          borderBottom: `1px solid ${colors.border}`, // Optional separator
         }}
       >
         {!imgError && image_url ? (
           <img
             src={image_url}
             alt={name}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              objectPosition: imagePosition || "center center"
+            }}
             onError={() => setImgError(true)}
           />
         ) : (
@@ -79,27 +87,36 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         )}
       </div>
 
-      <h3
-        style={{
-          margin: `0 0 ${spacing.sm} 0`,
-          fontSize: typography.sizes.lg,
-          color: colors.primary,
-          fontWeight: "900",
-          fontFamily: typography.fontFamily,
-        }}
-      >
-        {name}
-      </h3>
-      <p
-        style={{
-          margin: 0,
-          fontSize: typography.sizes.base,
-          color: colors.textLight,
-          fontFamily: typography.fontFamily, // Usamos la fuente Body (Lato)
-        }}
-      >
-        ${price.toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-      </p>
+      {/* Content Section */}
+      <div style={{ padding: spacing.md, width: "100%" }}>
+        <h3
+          style={{
+            margin: `0 0 ${spacing.sm} 0`,
+            fontSize: typography.sizes.lg,
+            color: colors.primary,
+            fontWeight: "900",
+            fontFamily: typography.fontFamily,
+          }}
+        >
+          {name.split(/(\(.*?\))/).map((part, index) =>
+            part.startsWith("(") && part.endsWith(")") ? (
+              <span key={index} style={{ whiteSpace: "nowrap" }}>{part}</span>
+            ) : (
+              part
+            )
+          )}
+        </h3>
+        <p
+          style={{
+            margin: 0,
+            fontSize: typography.sizes.base,
+            color: colors.textLight,
+            fontFamily: typography.fontFamily,
+          }}
+        >
+          ${price.toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+        </p>
+      </div>
     </button>
   );
 };

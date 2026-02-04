@@ -23,6 +23,7 @@ interface Product {
   dimensions?: string;
   options?: string;
   min_quantity?: number;
+  image_position?: string;
 }
 
 const SocialIcon = ({ href, children }: { href: string; children: React.ReactNode }) => {
@@ -371,7 +372,7 @@ export default function Home() {
                 textIndent: spacing.xl,
                 margin: 0
               }}>
-                Cuando una persona o empresa quiere agasajar a sus invitados o clientes, nada mejor que hacerlo con un producto tentador como es el chocolate... personalizando su envoltorio.
+                Cuando una persona o empresa quiere agasajar a sus invitados o clientes, nada mejor que hacerlo con un producto tentador como es el chocolate... personalizando su envoltorio. Mas allá de lo emotivo, endulzarle el día a alguien querido es un acto totalmente grato, tanto para el que recibe el regalo como para el que lo brinda.
               </p>
             </div>
           </div>
@@ -413,7 +414,10 @@ export default function Home() {
         }
         @media (max-width: 768px) {
           .main-content {
-            padding: ${spacing.sm} !important; /* Reduced padding for wider cards */
+            padding: ${spacing.sm} !important; /* Restore small padding for margins */
+          }
+          .product-grid {
+             gap: ${spacing.sm} !important; /* Standard gap */
           }
         }
       `}} />
@@ -472,6 +476,7 @@ export default function Home() {
                   name={product.name}
                   price={product.price}
                   image_url={product.image_url}
+                  imagePosition={product.image_position}
                   onSelect={setSelectedProductId}
                 />
               ))}
