@@ -9,7 +9,7 @@
     "description": "Caja por 120 unidades",
     "image_url": "/images/products/simples-chicos-120-pastel.png",
     "allows_customization": true,
-    "image_position": "center 70%"
+    "is_visible": true
   },
   {
     "id": 11,
@@ -126,9 +126,8 @@
     "dimensions": "",
     "description": "Bolsita de tul con 2 unidades",
     "image_url": "/images/products/simples-chicos-tul-5-pastel.png",
-    "options": null,
     "allows_customization": false,
-    "min_quantity": 1
+    "is_visible": true
   },
   {
     "id": 21,

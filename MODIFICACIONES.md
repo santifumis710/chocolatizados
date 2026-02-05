@@ -94,3 +94,11 @@ Todos los detalles están en este archivo `MODIFICACIONES.md`
 | 23 Ene 21:20 | `src/frontend` | 🐛 Corrección - Manejo robusto de errores de imagen (prevenir TypeError) |
 | 23 Ene 21:30 | `src/frontend` | ✨ Feature - Tarjetas Interactivas con selector de sabor y Vista Detalle simplificada (sin foto) |
 | 23 Ene 21:40 | `src/frontend` | 🔙 Revert & Shift - Catálogo vuelve a ser simple. Interactividad movida a sección "Nuestras Formas" |
+
+---
+
+## ACTUALIZACIÓN: Regeneración de Imágenes (05 Febrero 2026)
+
+| Fecha/Hora | Archivo | Cambio |
+|-----------|---------|--------|
+| 05 Feb 16:15 | `src/frontend/public/images/products/tableta-blanco-pastel.png` | 🎨 Diseño - Actualizada imagen de Tableta Blanco a estilo Pastel (Generada con AI) |

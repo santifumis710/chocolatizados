@@ -34,17 +34,6 @@ export const productTypes: ProductType[] = [
         },
     },
     {
-        id: "Tabletas Chicas",
-        title: "Tabletas Chicas",
-        weight: "18g",
-        size: "6,5 x 4,8 cm",
-        images: {
-            semi: "/placeholders/tabletas-chicas-semi.jpg",
-            white: "/placeholders/tabletas-chicas-white.jpg",
-            milk: "/placeholders/tabletas-chicas-milk.jpg",
-        },
-    },
-    {
         id: "Bombones Rellenos",
         title: "Bombones Rellenos",
         weight: "12g",
@@ -56,20 +45,20 @@ export const productTypes: ProductType[] = [
         },
     },
     {
-        id: "Barritas Rellenas",
-        title: "Barritas Rellenas",
-        weight: "30g",
-        size: "9,5 x 2,5 cm",
+        id: "Tabletas Chicas",
+        title: "Tabletas Chicas",
+        weight: "18g",
+        size: "6,5 x 4,8 cm",
         images: {
-            semi: "/placeholders/barritas-rellenas-semi.jpg",
-            white: "/placeholders/barritas-rellenas-white.jpg",
-            milk: "/placeholders/barritas-rellenas-milk.jpg",
+            semi: "/placeholders/tabletas-chicas-semi.jpg",
+            white: "/placeholders/tabletas-chicas-white.jpg",
+            milk: "/placeholders/tabletas-chicas-milk.jpg",
         },
     },
     {
         id: "Tabletas",
-        title: "Tabletas",
-        weight: "70/60g",
+        title: "Tabletas Grandes",
+        weight: "65g",
         size: "9,5 x 6,5 cm",
         images: {
             semi: "/placeholders/tabletas-semi.jpg",

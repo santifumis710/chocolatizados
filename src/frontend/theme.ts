@@ -11,11 +11,11 @@
  */
 
 export const colors = {
-  primary: "#A83A2B",      // Nuevo Rojo
-  secondary: "#CDAA7D",    // Nuevo Oro/Tan
-  background: "#F5E6D3",   // Crema
-  text: "#333333",         // Casi negro
-  textLight: "#666666",    // Gris
+  primary: "#A83A2B",      // Brand Red
+  secondary: "#CDAA7D",    // Brand Gold/Tan
+  background: "#F5E6D3",   // Brand Cream
+  text: "#333333",         // Charcoal
+  textLight: "#666666",    // Grey
   white: "#FFFFFF",
   error: "#D32F2F",
   success: "#388E3C",

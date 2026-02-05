@@ -8,10 +8,12 @@ This directive outlines the process to upgrade the product images in the "Nuestr
 > [!IMPORTANT]
 > **Daily Limit**: Attempts to generate many images may fail due to API rate limits. If this happens, PAUSE and resume later. Do not create low-quality placeholders.
 > **Preserve Originals**: Never overwrite the `.jpg` source files. Always create new files with a `-pastel.png` suffix.
+> **Realism**: You MUST use the original `.jpg` image as an input for the generation (img2img) to ensure the product shape and quantity remains accurate. Do not add non-existent chocolates.
 
-## 2. Visual Style (Pastel Warm)
+## 2. Visual Style (Modern Slate & Warm)
 **Prompt**:
-> "product photography of [DESCRIPTION] on a soft pastel cream or light pink background, warm ambient lighting, soft shadows, cozy and premium feel, high quality, 4k"
+> "product photography of [DESCRIPTION] arranged on a modern dark grey slate or stone slab, warm ambient lighting casting soft shadows, premium textures, cinematic elegant feel, high quality, 4k"
+> *Note: Ensure clear color distinction between Semi (Dark Brown) and Milk (Lighter Brown/Tan) chocolates.*
 
 ## 3. Execution Plan (Batch Process)
 The `CategoryShowcase.tsx` file controls these images. You will need to generate a new image for each Flavor (Semi, White, Milk) for each Category.

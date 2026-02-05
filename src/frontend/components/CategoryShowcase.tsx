@@ -73,36 +73,31 @@ const CategoryCard = ({
     // Helper to get image path based on type and flavor
     const getImagePath = () => {
         if (type.id === "Tabletas") {
-            if (selectedFlavor === "semi") return "/images/products/tableta-semi-amargo.jpg";
-            if (selectedFlavor === "white") return "/images/products/tableta-blanco.jpg";
-            if (selectedFlavor === "milk") return "/images/products/tableta-leche.jpg";
+            if (selectedFlavor === "semi") return "/images/products/tableta-semi-amargo-pastel.png";
+            if (selectedFlavor === "white") return "/images/products/tableta-blanco-pastel.png";
+            if (selectedFlavor === "milk") return "/images/products/tableta-leche-pastel.png";
         }
         if (type.id === "Bombones Rellenos") {
-            if (selectedFlavor === "semi") return "/images/products/bombones-rellenos-semi.jpg";
-            if (selectedFlavor === "white") return "/images/products/bombones-rellenos-blanco.jpg";
-            if (selectedFlavor === "milk") return "/images/products/bombones-rellenos-leche.jpg";
+            if (selectedFlavor === "semi") return "/images/products/bombones-rellenos-semi-pastel.png";
+            if (selectedFlavor === "white") return "/images/products/bombones-rellenos-blanco-pastel.png";
+            if (selectedFlavor === "milk") return "/images/products/bombones-rellenos-leche-pastel.png";
         }
         if (type.id === "Simples Chicos") {
-            if (selectedFlavor === "semi") return "/images/products/simples-chicos-semi.jpg";
-            if (selectedFlavor === "white") return "/images/products/simples-chicos-blanco.jpg";
-            if (selectedFlavor === "milk") return "/images/products/simples-chicos-leche.jpg";
+            if (selectedFlavor === "semi") return "/images/products/simples-chicos-semi-pastel.png";
+            if (selectedFlavor === "white") return "/images/products/simples-chicos-blanco-pastel.png";
+            if (selectedFlavor === "milk") return "/images/products/simples-chicos-leche-pastel.png";
         }
         if (type.id === "Simples Grandes") {
-            if (selectedFlavor === "semi") return "/images/products/simples-grandes-semi.jpg";
-            if (selectedFlavor === "white") return "/images/products/simples-grandes-blanco.jpg";
-            if (selectedFlavor === "milk") return "/images/products/simples-grandes-leche.jpg";
+            if (selectedFlavor === "semi") return "/images/products/simples-grandes-semi-pastel.png";
+            if (selectedFlavor === "white") return "/images/products/simples-grandes-blanco-pastel.png";
+            if (selectedFlavor === "milk") return "/images/products/simples-grandes-leche-pastel.png";
         }
         if (type.id === "Tabletas Chicas") {
-            if (selectedFlavor === "semi") return "/images/products/tabletas-chicas-semi.jpg";
-            if (selectedFlavor === "white") return "/images/products/tabletas-chicas-blanco.jpg";
-            if (selectedFlavor === "milk") return "/images/products/tabletas-chicas-leche.jpg";
+            if (selectedFlavor === "semi") return "/images/products/tabletas-chicas-semi-pastel.png";
+            if (selectedFlavor === "white") return "/images/products/tabletas-chicas-blanco-pastel.png";
+            if (selectedFlavor === "milk") return "/images/products/tabletas-chicas-leche-pastel.png";
         }
-        if (type.id === "Barritas Rellenas") {
-            if (selectedFlavor === "semi") return "/images/products/barritas-rellenas-semi.jpg";
-            if (selectedFlavor === "white") return "/images/products/barritas-rellenas-blanco.jpg";
-            // Milk is missing, return null to show placeholder
-            if (selectedFlavor === "milk") return null;
-        }
+
         return null; // Placeholder for others
     };
 
@@ -115,10 +110,7 @@ const CategoryCard = ({
             // Let's try 30% 50% to shift focus left.
             if (selectedFlavor === "semi" || selectedFlavor === "milk") return "30% 50%";
         }
-        if (type.id === "Barritas Rellenas") {
-            // "move above" -> center 75% (moved from 65%)
-            return "center 75%";
-        }
+
         return "center center";
     };
 
@@ -150,7 +142,7 @@ const CategoryCard = ({
         >
             {/* Image Area */}
             <div style={{
-                height: "150px",
+                height: "200px",
                 backgroundColor: "#f0f0f0",
                 display: "flex",
                 flexDirection: "column",
@@ -272,8 +264,8 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
                 }
                 .showcase-grid {
                     display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-                    gap: ${spacing.sm};
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: ${spacing.md};
                     max-width: 1200px;
                     margin: 0 auto;
                 }
