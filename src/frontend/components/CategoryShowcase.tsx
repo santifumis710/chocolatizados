@@ -70,31 +70,7 @@ const CategoryCard = ({
         setSelectedFlavor(flavor);
     };
 
-    // Helper to get image path based on type and flavor
-    const getImagePath = () => {
-        if (type.id === "Tabletas") {
-            // Using the new "Dia del Padre" v6 image for all flavors as it is the high-quality reference
-            return "/images/products/tableta-grande-individual-dia-del-padre-pastel-v6.png";
-        }
-        if (type.id === "Bombones Rellenos") {
-            return "/images/products/bombones-rellenos-tul-x2-pastel.png";
-        }
-        if (type.id === "Simples Chicos") {
-            if (selectedFlavor === "semi") return "/images/products/simples-chicos-semi-pastel.png";
-            if (selectedFlavor === "white") return "/images/products/simples-chicos-blanco-pastel.png";
-            if (selectedFlavor === "milk") return "/images/products/simples-chicos-leche-pastel.png";
-        }
-        if (type.id === "Simples Grandes") {
-            // Using v6 high quality image
-            return "/images/products/simples-grandes-tul-2-pastel-v6.png";
-        }
-        if (type.id === "Tabletas Chicas") {
-            // Using v3 high quality image
-            return "/images/products/tabletas-chicas-tul-x2-pastel-v3.png";
-        }
-
-        return null; // Placeholder for others
-    };
+    const imagePath = type.images[selectedFlavor];
 
     const getObjectPosition = () => {
         if (type.id === "Simples Chicos") {
@@ -116,7 +92,7 @@ const CategoryCard = ({
         setImgError(false);
     }, [selectedFlavor, type.id]);
 
-    const imagePath = getImagePath();
+
 
     return (
         <div
