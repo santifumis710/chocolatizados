@@ -41,6 +41,7 @@ Thumbs.db
 # Database
 *.db
 *.sqlite3
+src/backend/data/orders.json
 
 # API Keys & Credentials
 credentials.json

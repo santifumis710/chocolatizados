@@ -5,10 +5,11 @@ import { checkAuth, logout, fetchProducts, deleteProduct, updateProduct, createP
 import { colors, spacing, typography, borderRadius } from '@/theme';
 import { ProductModal } from './ProductModal';
 import { OrdersTable } from './OrdersTable';
+import { StatsView } from './StatsView';
 
 export default function AdminDashboard() {
     const router = useRouter();
-    const [activeTab, setActiveTab] = useState<'products' | 'orders'>('products');
+    const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'stats'>('products');
     const [products, setProducts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -142,6 +143,20 @@ export default function AdminDashboard() {
                     >
                         📋 Pedidos
                     </button>
+                    <button
+                        onClick={() => setActiveTab('stats')}
+                        style={{
+                            padding: spacing.md,
+                            background: 'none',
+                            border: 'none',
+                            borderBottom: activeTab === 'stats' ? `2px solid ${colors.primary}` : 'none',
+                            color: activeTab === 'stats' ? colors.primary : colors.textLight,
+                            fontWeight: 'bold',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        📊 Estadísticas
+                    </button>
                 </div>
 
                 {activeTab === 'products' ? (
@@ -212,8 +227,10 @@ export default function AdminDashboard() {
                             product={currentProduct}
                         />
                     </>
-                ) : (
+                ) : activeTab === 'orders' ? (
                     <OrdersTable />
+                ) : (
+                    <StatsView />
                 )}
             </div>
         </div>
