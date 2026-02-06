@@ -17,9 +17,9 @@ export const productTypes: ProductType[] = [
         weight: "5g",
         size: "3 x 2,5 cm",
         images: {
-            semi: "/placeholders/simples-chicos-semi.jpg",
-            white: "/placeholders/simples-chicos-white.jpg",
-            milk: "/placeholders/simples-chicos-milk.jpg",
+            semi: "/images/products/simples-chicos-semi-pastel.png",
+            white: "/images/products/simples-chicos-blanco-pastel.png",
+            milk: "/images/products/simples-chicos-leche-pastel.png",
         },
     },
     {
