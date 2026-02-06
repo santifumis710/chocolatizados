@@ -28,9 +28,9 @@ export const productTypes: ProductType[] = [
         weight: "9g",
         size: "4,5 x 2,5 cm",
         images: {
-            semi: "/placeholders/simples-grandes-semi.jpg",
-            white: "/placeholders/simples-grandes-white.jpg",
-            milk: "/placeholders/simples-grandes-milk.jpg",
+            semi: "/images/products/simples-grandes-tul-2-pastel-v6.png",
+            white: "/images/products/simples-grandes-tul-2-pastel-v6.png",
+            milk: "/images/products/simples-grandes-tul-2-pastel-v6.png",
         },
     },
     {
@@ -39,9 +39,9 @@ export const productTypes: ProductType[] = [
         weight: "12g",
         size: "3 x 3 cm",
         images: {
-            semi: "/placeholders/bombones-rellenos-semi.jpg",
-            white: "/placeholders/bombones-rellenos-white.jpg",
-            milk: "/placeholders/bombones-rellenos-milk.jpg",
+            semi: "/images/products/bombones-rellenos-tul-x2-pastel.png",
+            white: "/images/products/bombones-rellenos-tul-x2-pastel.png",
+            milk: "/images/products/bombones-rellenos-tul-x2-pastel.png",
         },
     },
     {
@@ -50,9 +50,9 @@ export const productTypes: ProductType[] = [
         weight: "18g",
         size: "6,5 x 4,8 cm",
         images: {
-            semi: "/placeholders/tabletas-chicas-semi.jpg",
-            white: "/placeholders/tabletas-chicas-white.jpg",
-            milk: "/placeholders/tabletas-chicas-milk.jpg",
+            semi: "/images/products/tabletas-chicas-tul-x2-pastel-v3.png",
+            white: "/images/products/tabletas-chicas-tul-x2-pastel-v3.png",
+            milk: "/images/products/tabletas-chicas-tul-x2-pastel-v3.png",
         },
     },
     {
@@ -61,9 +61,9 @@ export const productTypes: ProductType[] = [
         weight: "65g",
         size: "9,5 x 6,5 cm",
         images: {
-            semi: "/placeholders/tabletas-semi.jpg",
-            white: "/placeholders/tabletas-white.jpg",
-            milk: "/placeholders/tabletas-milk.jpg",
+            semi: "/images/products/tableta-grande-individual-dia-del-padre-pastel-v6.png",
+            white: "/images/products/tableta-grande-individual-dia-del-padre-pastel-v6.png",
+            milk: "/images/products/tableta-grande-individual-dia-del-padre-pastel-v6.png",
         },
     },
 ];

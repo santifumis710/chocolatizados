@@ -73,14 +73,11 @@ const CategoryCard = ({
     // Helper to get image path based on type and flavor
     const getImagePath = () => {
         if (type.id === "Tabletas") {
-            if (selectedFlavor === "semi") return "/images/products/tableta-semi-amargo-pastel.png";
-            if (selectedFlavor === "white") return "/images/products/tableta-blanco-pastel.png";
-            if (selectedFlavor === "milk") return "/images/products/tableta-leche-pastel.png";
+            // Using the new "Dia del Padre" v6 image for all flavors as it is the high-quality reference
+            return "/images/products/tableta-grande-individual-dia-del-padre-pastel-v6.png";
         }
         if (type.id === "Bombones Rellenos") {
-            if (selectedFlavor === "semi") return "/images/products/bombones-rellenos-semi-pastel.png";
-            if (selectedFlavor === "white") return "/images/products/bombones-rellenos-blanco-pastel.png";
-            if (selectedFlavor === "milk") return "/images/products/bombones-rellenos-leche-pastel.png";
+            return "/images/products/bombones-rellenos-tul-x2-pastel.png";
         }
         if (type.id === "Simples Chicos") {
             if (selectedFlavor === "semi") return "/images/products/simples-chicos-semi-pastel.png";
@@ -88,14 +85,12 @@ const CategoryCard = ({
             if (selectedFlavor === "milk") return "/images/products/simples-chicos-leche-pastel.png";
         }
         if (type.id === "Simples Grandes") {
-            if (selectedFlavor === "semi") return "/images/products/simples-grandes-semi-pastel.png";
-            if (selectedFlavor === "white") return "/images/products/simples-grandes-blanco-pastel.png";
-            if (selectedFlavor === "milk") return "/images/products/simples-grandes-leche-pastel.png";
+            // Using v6 high quality image
+            return "/images/products/simples-grandes-tul-2-pastel-v6.png";
         }
         if (type.id === "Tabletas Chicas") {
-            if (selectedFlavor === "semi") return "/images/products/tabletas-chicas-semi-pastel.png";
-            if (selectedFlavor === "white") return "/images/products/tabletas-chicas-blanco-pastel.png";
-            if (selectedFlavor === "milk") return "/images/products/tabletas-chicas-leche-pastel.png";
+            // Using v3 high quality image
+            return "/images/products/tabletas-chicas-tul-x2-pastel-v3.png";
         }
 
         return null; // Placeholder for others
