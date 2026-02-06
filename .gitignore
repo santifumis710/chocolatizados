@@ -46,3 +46,6 @@ src/backend/data/orders.json
 # API Keys & Credentials
 credentials.json
 token.json
+
+# Data
+src/frontend/public/products.json
