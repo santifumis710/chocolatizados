@@ -266,10 +266,10 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
                         fontWeight: "900",
                     }}
                 >
-                    Nuestros Tamaños
+                    Tamaños
                 </h2>
                 <p style={{ color: colors.textLight, fontWeight: "400" }}>
-                    Selecciona un tamaño para ver las distintas presentaciones. Prueba los botones de colores para ver las variantes.
+                    Elegí un tamaño para ver las distintas presentaciones.
                 </p>
             </div>
 

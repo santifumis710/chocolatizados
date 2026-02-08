@@ -276,7 +276,7 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
         <div
           style={{
             padding: spacing.lg,
-            paddingBottom: "calc(40px + env(safe-area-inset-bottom))", // Extra spacing + Mobile Safe Area
+            paddingBottom: "calc(20px + env(safe-area-inset-bottom))", // Ensure buttons are above Safari bar
             borderTop: `1px solid ${colors.border}`,
             backgroundColor: colors.background,
           }}

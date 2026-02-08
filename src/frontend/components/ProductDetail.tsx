@@ -260,18 +260,26 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
             <label
               style={{
                 display: "block",
-                marginBottom: spacing.sm,
+                marginBottom: spacing.xs,
                 fontSize: typography.sizes.sm,
                 fontWeight: "bold",
                 color: colors.text,
               }}
             >
-              ✨ Notas especiales (tipo de chocolate, personalizacion, etc):
+              ✨ Momento de personalizar tus chocolates!!
             </label>
+            <p style={{
+              fontSize: typography.sizes.xs,
+              color: colors.textLight,
+              marginBottom: spacing.sm,
+              marginTop: 0
+            }}>
+              Escribí todo lo que puedas para ayudarme a diseñar tus chocolates… Luego, seguimos por whatsapp
+            </p>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Describe tus especificaciones..."
+              placeholder="Describe tus ideas..."
               maxLength={500}
               style={{
                 width: "100%",
@@ -324,7 +332,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
         <div
           style={{
             padding: spacing.lg,
-            paddingBottom: "calc(40px + env(safe-area-inset-bottom))", // Extra spacing + Mobile Safe Area
+            paddingBottom: "calc(20px + env(safe-area-inset-bottom))", // Ensure buttons are above Safari bar
             borderTop: `1px solid ${colors.border}`,
             backgroundColor: colors.background,
           }}

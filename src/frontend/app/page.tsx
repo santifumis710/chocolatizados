@@ -280,21 +280,7 @@ export default function Home() {
                   borderRadius: "8px",
                 }}
               />
-              {/* Slogan Desktop */}
-              <div className="desktop-only">
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: "24px",
-                    color: colors.secondary,
-                    fontFamily: typography.fontFamilySerif,
-                    fontStyle: "italic",
-                    fontWeight: "normal",
-                  }}
-                >
-                  "Lo que quieras decir, decilo con chocolates"
-                </p>
-              </div>
+              {/* Slogan Removed */}
             </div>
 
             {/* Right: Social Icons */}
@@ -336,21 +322,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Bottom Row: Mobile Slogan */}
-          <div className="mobile-only" style={{ marginTop: spacing.sm, textAlign: "center" }}>
-            <p
-              style={{
-                margin: 0,
-                fontSize: "16px",
-                color: colors.secondary,
-                fontFamily: typography.fontFamilySerif,
-                fontStyle: "italic",
-                fontWeight: "normal",
-              }}
-            >
-              "Lo que quieras decir, decilo con chocolates"
-            </p>
-          </div>
+          {/* Mobile Slogan Removed */}
         </div>
       </header>
 
