@@ -110,7 +110,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
           position: "fixed",
           top: 0,
           right: 0,
-          height: "100vh",
+          height: "100dvh", // Use dynamic viewport height for mobile browsers
           width: "450px",
           maxWidth: "100%",
           backgroundColor: colors.white,
@@ -332,7 +332,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
         <div
           style={{
             padding: spacing.lg,
-            paddingBottom: "calc(20px + env(safe-area-inset-bottom))", // Ensure buttons are above Safari bar
+            paddingBottom: "calc(30px + env(safe-area-inset-bottom))", // Ensure buttons are above Safari bar
             borderTop: `1px solid ${colors.border}`,
             backgroundColor: colors.background,
           }}
