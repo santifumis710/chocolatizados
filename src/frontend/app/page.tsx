@@ -86,7 +86,7 @@ export default function Home() {
 
   const handleAddToCart = (item: Omit<CartItem, "quantity">, quantity: number) => {
     addItem({ ...item, quantity });
-    setCartOpen(true); // Open cart sidebar for immediate feedback
+    // setCartOpen(true); // Removed auto-open to allow continued shopping
   };
 
   const handleCheckout = () => {
