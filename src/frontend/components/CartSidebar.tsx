@@ -315,7 +315,7 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
               transition: "background-color 0.3s ease",
             }}
           >
-            📲 Continuar al checkout
+            📲 Continuar por Whatsapp
           </button>
 
           <button

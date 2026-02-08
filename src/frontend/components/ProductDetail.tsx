@@ -266,7 +266,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
                 color: colors.text,
               }}
             >
-              ✨ Momento de personalizar tus chocolates!!
+              ✨ Momento de personalizar tus chocolates!!.
             </label>
             <p style={{
               fontSize: typography.sizes.xs,
@@ -274,7 +274,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
               marginBottom: spacing.sm,
               marginTop: 0
             }}>
-              Escribí todo lo que puedas para ayudarme a diseñar tus chocolates… Luego, seguimos por whatsapp
+              Escribí todo lo que puedas para ayudarme a diseñar tus chocolates… Luego, seguimos por whatsapp.
             </p>
             <textarea
               value={notes}
