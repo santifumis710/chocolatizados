@@ -331,13 +331,12 @@ export default function Home() {
         <div className="hero-content-wrapper">
           {/* Content unchanged, styles handled by class above */}
 
-          {/* Row 1: Text Left | Image Right */}
-          <div className="hero-row" style={{ flexDirection: "row-reverse" }}>
-            {/* ... existing hero HTML ... */}
+          {/* Row 1: Image Left | Text Right */}
+          <div className="hero-row" style={{ flexDirection: "row" }}>
             <div className="hero-col">
               <img src="/images/products/hero-tabletas.jpg" alt="Chocolate artesanal" className="hero-img" style={{ borderRadius: "16px" }} />
             </div>
-            <div className="hero-col hero-text-left">
+            <div className="hero-col hero-text-right">
               <p style={{
                 fontSize: typography.sizes.lg,
                 lineHeight: 1.8,
@@ -351,7 +350,26 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Row 2 */}
+          {/* Row 2 (New): Text Left | Image Right */}
+          <div className="hero-row" style={{ flexDirection: "row-reverse" }}>
+            <div className="hero-col">
+              <img src="/images/marie.jpg" alt="Mariela" className="hero-img" style={{ borderRadius: "16px" }} />
+            </div>
+            <div className="hero-col hero-text-left">
+              <p style={{
+                fontSize: typography.sizes.lg,
+                lineHeight: 1.8,
+                fontStyle: "italic",
+                textAlign: "justify",
+                textIndent: spacing.xl,
+                margin: 0
+              }}>
+                Soy Mariela y mi intención es lograr que lo que quieras decir, lo digas con chocolates.
+              </p>
+            </div>
+          </div>
+
+          {/* Row 3: Image Left | Text Right */}
           <div className="hero-row" style={{ flexDirection: "row" }}>
             <div className="hero-col">
               <img src="/images/products/hero-bombones.jpg" alt="Bombones premium" className="hero-img" style={{ borderRadius: "16px" }} />
