@@ -352,8 +352,17 @@ export default function Home() {
 
           {/* Row 2 (New): Text Left | Image Right */}
           <div className="hero-row" style={{ flexDirection: "row-reverse" }}>
-            <div className="hero-col">
-              <img src="/images/marie.jpg" alt="Mariela" className="hero-img" style={{ borderRadius: "16px" }} />
+            <div className="hero-col" style={{ display: "flex", justifyContent: "center" }}>
+              <img
+                src="/images/marie.jpg"
+                alt="Mariela"
+                className="hero-img"
+                style={{
+                  borderRadius: "16px",
+                  maxWidth: "70%",
+                  height: "auto"
+                }}
+              />
             </div>
             <div className="hero-col hero-text-left">
               <p style={{
