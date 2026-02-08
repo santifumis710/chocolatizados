@@ -373,7 +373,7 @@ export default function Home() {
                 textIndent: spacing.xl,
                 margin: 0
               }}>
-                Soy Mariela y mi intención es lograr que lo que quieras decir, lo digas con chocolates.
+                Soy Mariela, la persona detrás de Chocolatizados. Hace mas de 18 años nació este emprendimiento, que permite transformar chocolate verdadero en momentos únicos. Mi intención es lograr que lo que quieras decir, lo digas con chocolates.
               </p>
             </div>
           </div>
