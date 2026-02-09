@@ -406,7 +406,7 @@ export default function Home() {
           {/* Row 1: Image Left | Text Right */}
           <div className="hero-row" style={{ flexDirection: "row" }}>
             <div className="hero-col">
-              <img src="/images/products/hero-tabletas.jpg" alt="Chocolate artesanal" className="hero-img" style={{ borderRadius: "16px" }} />
+              <img src="/images/hero_madre_16_9.jpg" alt="Chocolate artesanal - Día de la Madre" className="hero-img" style={{ borderRadius: "16px" }} />
             </div>
             <div className="hero-col hero-text-right">
               <p style={{
