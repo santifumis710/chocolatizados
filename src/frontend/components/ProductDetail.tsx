@@ -37,18 +37,27 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<number>(0);
   const [notes, setNotes] = useState("");
-  if (!product) return null;
+  const [selectedFlavors, setSelectedFlavors] = useState<string[]>([]);
+  const [selectedFillings, setSelectedFillings] = useState<string[]>([]); // For Dulce de leche
+  const [selectedPastas, setSelectedPastas] = useState<string[]>([]); // For pastas
+  const [showFlavorError, setShowFlavorError] = useState(false);
+  const [showFillingError, setShowFillingError] = useState(false);
 
   // Actualizar cantidad mínima
   React.useEffect(() => {
     if (product) {
       setQuantity(product.min_quantity || 1);
       setSelectedOption(""); // Reset option on new product
+      setSelectedFlavors([]); // Reset flavors
+      setSelectedFillings([]); // Reset fillings
+      setSelectedPastas([]); // Reset pastas
+      setShowFlavorError(false); // Reset errors
+      setShowFillingError(false);
     }
   }, [product]);
 
   // Parsear opciones
-  const optionsList = product.options
+  const optionsList = product?.options
     ? product.options.split(",").map((opt) => {
       const parts = opt.trim().split("|");
       return {
@@ -60,22 +69,54 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
 
   // Inicializar precio y opción por defecto
   React.useEffect(() => {
-    if (optionsList.length > 0 && !selectedOption) {
-      setSelectedOption(optionsList[0].name);
-      setSelectedPrice(optionsList[0].price);
-    } else if (optionsList.length === 0) {
-      setSelectedPrice(product.price);
+    if (product) {
+      if (optionsList.length > 0 && !selectedOption) {
+        setSelectedOption(optionsList[0].name);
+        setSelectedPrice(optionsList[0].price);
+      } else if (optionsList.length === 0) {
+        setSelectedPrice(product.price);
+      }
     }
   }, [product, optionsList, selectedOption]);
 
   const handleAddToCart = () => {
+    if (!product) return;
+
+    let isValid = true;
+
+    // Validate Flavors (Mandatory for all products that show this section)
+    if (selectedFlavors.length === 0) {
+      setShowFlavorError(true);
+      isValid = false;
+    } else {
+      setShowFlavorError(false);
+    }
+
+    // Validate Fillings/Pastas (Mandatory for Bombones Rellenos)
+    if (product.category === "Bombones Rellenos") {
+      if (selectedFillings.length === 0 && selectedPastas.length === 0) {
+        setShowFillingError(true);
+        isValid = false;
+      } else {
+        setShowFillingError(false);
+      }
+    }
+
+    if (!isValid) return;
+
+    const flavorsText = selectedFlavors.length > 0 ? `Sabores: ${selectedFlavors.join(", ")}` : "";
+    const fillingsText = selectedFillings.length > 0 ? `Rellenos: ${selectedFillings.join(", ")}` : "";
+    const pastasText = selectedPastas.length > 0 ? `Pastas: ${selectedPastas.join(", ")}` : "";
+
+    const finalNotes = [flavorsText, fillingsText, pastasText, notes].filter(Boolean).join("\n\n");
+
     onAddToCart(
       {
         product_id: product.id,
         name: product.name,
         price: selectedPrice,
         allows_customization: product.allows_customization,
-        customization_text: notes || undefined,
+        customization_text: finalNotes || undefined,
         image_url: undefined, // No guardamos imagen especifica ya que no se muestra en detalle
         min_quantity: product.min_quantity || 1,
       },
@@ -84,7 +125,9 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
     onClose();
   };
 
-  const minQty = product.min_quantity || 1;
+  const minQty = product?.min_quantity || 1;
+
+  if (!product) return null;
 
   return (
     <>
@@ -248,6 +291,165 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
             </div>
           </div>
 
+          {/* Sabores */}
+          <div
+            style={{
+              marginBottom: spacing.lg,
+              padding: spacing.md,
+              backgroundColor: colors.background,
+              borderRadius: borderRadius.md,
+              border: showFlavorError ? `2px solid ${colors.error}` : "none",
+            }}
+          >
+            <label
+              style={{
+                display: "block",
+                marginBottom: spacing.sm,
+                fontSize: typography.sizes.sm,
+                fontWeight: "bold",
+                color: showFlavorError ? colors.error : colors.text,
+              }}
+            >
+              🍫 Elegí el/los sabor/es que prefieras: {showFlavorError && "(Requerido)"}
+            </label>
+            <div style={{ display: "flex", gap: spacing.sm, flexWrap: "wrap", justifyContent: "center" }}>
+              {["Semi-amargo", "Blanco", "Con leche"].map((flavor) => (
+                <button
+                  key={flavor}
+                  onClick={() => {
+                    if (selectedFlavors.includes(flavor)) {
+                      setSelectedFlavors(selectedFlavors.filter((f) => f !== flavor));
+                    } else {
+                      setSelectedFlavors([...selectedFlavors, flavor]);
+                    }
+                  }}
+                  style={{
+                    padding: `${spacing.sm} ${spacing.md}`,
+                    backgroundColor: selectedFlavors.includes(flavor)
+                      ? colors.primary
+                      : colors.white,
+                    color: selectedFlavors.includes(flavor)
+                      ? colors.white
+                      : colors.text,
+                    border: `1px solid ${selectedFlavors.includes(flavor) ? colors.primary : colors.border}`,
+                    borderRadius: "50px", // Fully rounded / pill shape
+                    fontSize: typography.sizes.sm,
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                    boxShadow: selectedFlavors.includes(flavor) ? shadows.sm : "none",
+                  }}
+                >
+                  {flavor}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Rellenos (Solo para Bombones Rellenos) */}
+          {product.category === "Bombones Rellenos" && (
+            <div
+              style={{
+                marginBottom: spacing.lg,
+                padding: spacing.md,
+                backgroundColor: colors.background,
+                borderRadius: borderRadius.md,
+                border: showFillingError ? `2px solid ${colors.error}` : "none",
+              }}
+            >
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: spacing.sm,
+                  fontSize: typography.sizes.sm,
+                  fontWeight: "bold",
+                  color: showFillingError ? colors.error : colors.text,
+                }}
+              >
+                🍫 Elegí el/los relleno/s que prefieras: {showFillingError && "(Requerido)"}
+              </label>
+
+              {/* Dulce de leche */}
+              <div style={{ display: "flex", gap: spacing.sm, flexWrap: "wrap", justifyContent: "center", marginBottom: spacing.sm }}>
+                {["Dulce de leche"].map((filling) => (
+                  <button
+                    key={filling}
+                    onClick={() => {
+                      if (selectedFillings.includes(filling)) {
+                        setSelectedFillings(selectedFillings.filter((f) => f !== filling));
+                      } else {
+                        setSelectedFillings([...selectedFillings, filling]);
+                      }
+                    }}
+                    style={{
+                      padding: `${spacing.sm} ${spacing.md}`,
+                      backgroundColor: selectedFillings.includes(filling)
+                        ? colors.primary
+                        : colors.white,
+                      color: selectedFillings.includes(filling)
+                        ? colors.white
+                        : colors.text,
+                      border: `1px solid ${selectedFillings.includes(filling) ? colors.primary : colors.border}`,
+                      borderRadius: "50px",
+                      fontSize: typography.sizes.sm,
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                      boxShadow: selectedFillings.includes(filling) ? shadows.sm : "none",
+                    }}
+                  >
+                    {filling}
+                  </button>
+                ))}
+              </div>
+
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: spacing.sm,
+                  marginTop: spacing.md,
+                  fontSize: typography.sizes.sm,
+                  fontWeight: "bold",
+                  color: colors.text,
+                  textAlign: "center"
+                }}
+              >
+                y/o pasta sabor:
+              </label>
+
+              {/* Pastas */}
+              <div style={{ display: "flex", gap: spacing.sm, flexWrap: "wrap", justifyContent: "center" }}>
+                {["Chocolate", "Mani", "Frutilla", "Tiramisu", "Bananita", "Menta", "Avellana"].map((pasta) => (
+                  <button
+                    key={pasta}
+                    onClick={() => {
+                      if (selectedPastas.includes(pasta)) {
+                        setSelectedPastas(selectedPastas.filter((p) => p !== pasta));
+                      } else {
+                        setSelectedPastas([...selectedPastas, pasta]);
+                      }
+                    }}
+                    style={{
+                      padding: `${spacing.sm} ${spacing.md}`,
+                      backgroundColor: selectedPastas.includes(pasta)
+                        ? colors.primary
+                        : colors.white,
+                      color: selectedPastas.includes(pasta)
+                        ? colors.white
+                        : colors.text,
+                      border: `1px solid ${selectedPastas.includes(pasta) ? colors.primary : colors.border}`,
+                      borderRadius: "50px",
+                      fontSize: typography.sizes.sm,
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                      boxShadow: selectedPastas.includes(pasta) ? shadows.sm : "none",
+                    }}
+                  >
+                    {pasta}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Notas y personalizacion */}
           <div
             style={{
@@ -266,7 +468,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
                 color: colors.text,
               }}
             >
-              ✨ Momento de personalizar tus chocolates!!.
+              ✨ Momento de personalizar tus chocolates!!
             </label>
             <p style={{
               fontSize: typography.sizes.xs,

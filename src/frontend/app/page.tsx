@@ -8,7 +8,7 @@ import { CheckoutModal } from "@/components/CheckoutModal";
 import { ProductDetail } from "@/components/ProductDetail";
 import { CategoryShowcase } from "@/components/CategoryShowcase";
 import { useCart, CartItem } from "@/hooks/useCart";
-import { colors, spacing, typography } from "@/theme";
+import { colors, spacing, typography, borderRadius } from "@/theme";
 import { createOrder, fetchProducts } from "@/services/api";
 
 interface Product {
@@ -62,6 +62,8 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const { cart, addItem, removeItem, updateQuantity, clearCart, itemCount, total } = useCart();
 
+  const [toastState, setToastState] = useState<'hidden' | 'visible' | 'closing'>('hidden');
+
   useEffect(() => {
     // Cargar productos desde la API
     fetchProducts()
@@ -86,7 +88,19 @@ export default function Home() {
 
   const handleAddToCart = (item: Omit<CartItem, "quantity">, quantity: number) => {
     addItem({ ...item, quantity });
-    // setCartOpen(true); // Removed auto-open to allow continued shopping
+
+    // Toast logic
+    setToastState('visible');
+
+    // Start closing after 4.5s
+    setTimeout(() => {
+      setToastState('closing');
+    }, 4500);
+
+    // Completely hide after 5s (animation finish)
+    setTimeout(() => {
+      setToastState('hidden');
+    }, 5000);
   };
 
   const handleCheckout = () => {
@@ -236,7 +250,63 @@ export default function Home() {
                 .hero-col { flex: 1 1 auto; }
                 .hero-text-left, .hero-text-right { padding: 15px 20px; } /* Restore padding on mobile */
               }
+
+              /* Toast Animation */
+              @keyframes slideUpFadeIn {
+                from { transform: translateX(-50%) translateY(100%); opacity: 0; }
+                to { transform: translateX(-50%) translateY(0); opacity: 1; }
+              }
+              @keyframes slideDownFadeOut {
+                from { transform: translateX(-50%) translateY(0); opacity: 1; }
+                to { transform: translateX(-50%) translateY(100%); opacity: 0; }
+              }
+
+              .toast-notification {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: ${colors.primary};
+                color: ${colors.white};
+                padding: ${spacing.md} ${spacing.lg};
+                border-radius: 50px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 2000;
+                font-size: ${typography.sizes.base};
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                gap: ${spacing.sm};
+                white-space: nowrap;
+              }
+
+              .toast-entering {
+                animation: slideUpFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+              }
+              .toast-exiting {
+                animation: slideDownFadeOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+              }
+
+              @media (max-width: 768px) {
+                .toast-notification {
+                  width: auto;
+                  max-width: 90%;
+                  justify-content: center;
+                  white-space: nowrap;
+                  border-radius: 50px;
+                }
+              }
             `}} />
+
+      {/* Toast Notification */}
+      {toastState !== 'hidden' && (
+        <div
+          className={`toast-notification ${toastState === 'visible' ? 'toast-entering' : 'toast-exiting'}`}
+        >
+          <span>✅</span>
+          Producto agregado al carrito
+        </div>
+      )}
 
       {/* Header */}
       <header
@@ -325,6 +395,8 @@ export default function Home() {
           {/* Mobile Slogan Removed */}
         </div>
       </header>
+
+      {/* ... (Rest of layout) ... */}
 
       {/* Hero Section */}
       <section className="hero-background">
