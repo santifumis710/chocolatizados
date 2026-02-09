@@ -8,7 +8,7 @@ import { CheckoutModal } from "@/components/CheckoutModal";
 import { ProductDetail } from "@/components/ProductDetail";
 import { CategoryShowcase } from "@/components/CategoryShowcase";
 import { useCart, CartItem } from "@/hooks/useCart";
-import { colors, spacing, typography, borderRadius } from "@/theme";
+import { colors, spacing, typography } from "@/theme";
 import { createOrder, fetchProducts } from "@/services/api";
 
 interface Product {
