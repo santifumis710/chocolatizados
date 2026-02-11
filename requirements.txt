@@ -11,3 +11,4 @@ pandas>=2.2.0
 # Database
 psycopg2-binary
 sqlalchemy
+python-multipart

@@ -31,6 +31,7 @@ def on_startup():
     result = seed_products()
     print(f"🌱 Startup Seed Result: {result}")
 
+@app.get("/seed")
 @app.get("/api/seed")
 async def manual_seed():
     """Manually trigger product seeding for debugging"""
