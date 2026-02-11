@@ -43,6 +43,7 @@ async def get_orders(db: Session = Depends(get_db)):
     """Get all orders"""
     return db.query(OrderModel).all()
 
+@router.post("", response_model=Order)
 @router.post("/", response_model=Order)
 async def create_order(order_in: OrderCreate, db: Session = Depends(get_db)):
     """Create a new order"""
