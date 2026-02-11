@@ -28,7 +28,14 @@ def on_startup():
     from app.utils import seed_products
     
     init_db()
-    seed_products()
+    result = seed_products()
+    print(f"🌱 Startup Seed Result: {result}")
+
+@app.get("/api/seed")
+async def manual_seed():
+    """Manually trigger product seeding for debugging"""
+    from app.utils import seed_products
+    return seed_products()
 
 # CORS Configuration for Next.js frontend
 app.add_middleware(

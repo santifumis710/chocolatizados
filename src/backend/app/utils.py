@@ -5,33 +5,47 @@ from app.db import SessionLocal, ProductModel
 def seed_products():
     """
     Checks if the products table is empty.
-    If empty, populates it from src/backend/data/products.json.
+    If empty, populates it from products.json.
+    Returns a dict with status and debug info.
     """
     db = SessionLocal()
+    logs = []
     try:
+        logs.append(f"CWD: {os.getcwd()}")
+        
         # Check if products already exist
         if db.query(ProductModel).first():
-            # Database already has data, no need to seed
-            return
+            logs.append("Database already has data, skipping seed.")
+            return {"status": "skipped", "message": "Database already populated", "logs": logs}
 
-        print("🌱 Seeding database with initial products...")
+        logs.append("🌱 Seeding database...")
         
-        # Path to products.json (in src/backend/data)
-        # We are in src/backend/app/utils.py
-        # root is src/backend
-        backend_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        json_path = os.path.join(backend_root, "data", "products.json")
+        # Try multiple paths for robustness in Vercel
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        paths_to_try = [
+            os.path.join(base_dir, "data", "products.json"),
+            os.path.join(os.getcwd(), "src", "backend", "data", "products.json"),
+            os.path.join(os.getcwd(), "data", "products.json"),
+            "products.json" # If in root
+        ]
         
-        if not os.path.exists(json_path):
-            print(f"⚠️ Products JSON not found at: {json_path}")
-            return
+        json_path = None
+        for p in paths_to_try:
+            logs.append(f"Checking: {p}")
+            if os.path.exists(p):
+                json_path = p
+                logs.append(f"✅ Found at: {p}")
+                break
+        
+        if not json_path:
+            logs.append("❌ Products JSON not found in any location.")
+            return {"status": "error", "message": "JSON file not found", "logs": logs}
             
         with open(json_path, "r", encoding="utf-8") as f:
             products_data = json.load(f)
             
         count = 0
         for p in products_data:
-            # Double check existence (redundant but safe)
             if db.query(ProductModel).filter(ProductModel.id == p["id"]).first():
                 continue
                 
@@ -54,10 +68,11 @@ def seed_products():
             count += 1
             
         db.commit()
-        print(f"✅ Automatically seeded {count} products to Database.")
+        logs.append(f"✅ Seeded {count} products.")
+        return {"status": "success", "count": count, "logs": logs}
         
     except Exception as e:
-        print(f"❌ Automatic seeding failed: {e}")
-        # Don't raise, just log error so app can still start
+        logs.append(f"❌ Error: {str(e)}")
+        return {"status": "error", "message": str(e), "logs": logs}
     finally:
         db.close()
