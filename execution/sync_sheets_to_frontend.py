@@ -105,6 +105,10 @@ def main():
         print(f"\n📤 Exportando {len(products)} productos...")
         export_json(products, output_path)
         
+        # También guardar en Backend (para Vercel)
+        backend_path = Path("src/backend/data/products.json")
+        export_json(products, backend_path)
+        
         # También guardar en .tmp para referencia
         export_json(products, Path(".tmp/products.json"))
         
@@ -113,6 +117,7 @@ def main():
         print("=" * 60)
         print(f"\n📍 Ubicaciones:")
         print(f"   Frontend: {output_path}")
+        print(f"   Backend:  {backend_path}")
         print(f"   Backup:   .tmp/products.json")
         print(f"\n💡 Próximo paso: Agregar imágenes a src/frontend/public/images/products/")
         

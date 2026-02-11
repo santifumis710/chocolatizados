@@ -9,9 +9,10 @@ router = APIRouter(
     tags=["products"]
 )
 
-# Path to the shared products.json file
-# Assuming we are running from src/backend, and file is in src/frontend/public
-PRODUCTS_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "frontend", "public", "products.json")
+# Path to the products.json file in src/backend/data
+# Assuming we are running from src/backend/app/routes
+# We want: src/backend/data/products.json
+PRODUCTS_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data", "products.json")
 
 def read_products():
     if not os.path.exists(PRODUCTS_FILE):
