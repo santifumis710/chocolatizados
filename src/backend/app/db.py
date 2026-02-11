@@ -1,5 +1,5 @@
 import os
-from sqlalchemy import create_engine, Column, String, Float, DateTime, JSON, Text
+from sqlalchemy import create_engine, Column, String, Float, DateTime, JSON, Text, Integer, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -31,6 +31,26 @@ class OrderModel(Base):
     notes = Column(Text, nullable=True)
     items = Column(JSON) # Store items as JSON
     total = Column(Float)
+
+class ProductModel(Base):
+    __tablename__ = "products"
+
+    # Original JSON used integer IDs, we can keep them as integers or strings.
+    # Let's use Integer to match schemas.py
+    id = Column(Integer, primary_key=True, index=True) 
+    
+    name = Column(String, index=True)
+    price = Column(Float)
+    category = Column(String)
+    weight_g = Column(String, nullable=True) # JSON has mixed types sometimes
+    dimensions = Column(String, nullable=True)
+    description = Column(Text, nullable=True)
+    image_url = Column(String, nullable=True)
+    allows_customization = Column(Boolean, default=False)
+    is_visible = Column(Boolean, default=True)
+    min_quantity = Column(Integer, default=1)
+    options = Column(String, nullable=True) # Stored as string "Option1|100, Option2|200"
+    image_position = Column(String, nullable=True)
 
 def init_db():
     if engine:
