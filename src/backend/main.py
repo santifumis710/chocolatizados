@@ -21,6 +21,12 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# Initialize DB on startup
+@app.on_event("startup")
+def on_startup():
+    from app.db import init_db
+    init_db()
+
 # CORS Configuration for Next.js frontend
 app.add_middleware(
     CORSMiddleware,
