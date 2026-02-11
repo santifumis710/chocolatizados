@@ -19,6 +19,7 @@ app = FastAPI(
     title="Chocolatizados API",
     description="API para vender chocolates personalizados",
     version="1.0.0",
+    redirect_slashes=False,
 )
 
 # Initialize DB on startup

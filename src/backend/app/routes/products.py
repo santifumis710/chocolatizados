@@ -11,6 +11,7 @@ router = APIRouter(
     tags=["products"]
 )
 
+@router.get("", response_model=List[Product])
 @router.get("/", response_model=List[Product])
 async def get_products(db: Session = Depends(get_db)):
     """Get all products from DB"""

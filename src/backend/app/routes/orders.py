@@ -37,6 +37,7 @@ router = APIRouter(
     tags=["orders"]
 )
 
+@router.get("", response_model=List[Order])
 @router.get("/", response_model=List[Order])
 async def get_orders(db: Session = Depends(get_db)):
     """Get all orders"""

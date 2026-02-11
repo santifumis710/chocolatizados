@@ -3,8 +3,8 @@ from sqlalchemy import create_engine, Column, String, Float, DateTime, JSON, Tex
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-# Get DB URL from environment
-DATABASE_URL = os.getenv("POSTGRES_URL")
+# Get DB URL from environment (check multiple common names)
+DATABASE_URL = os.getenv("POSTGRES_URL") or os.getenv("DATABASE_URL") or os.getenv("POSTGRES_PRISMA_URL")
 
 # Ensure URL starts with postgresql:// for SQLAlchemy
 if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
