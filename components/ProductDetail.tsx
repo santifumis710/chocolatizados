@@ -108,7 +108,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
     const fillingsText = selectedFillings.length > 0 ? `Rellenos: ${selectedFillings.join(", ")}` : "";
     const pastasText = selectedPastas.length > 0 ? `Pastas: ${selectedPastas.join(", ")}` : "";
 
-    const finalNotes = [flavorsText, fillingsText, pastasText, notes].filter(Boolean).join("\n\n");
+    const finalNotes = [flavorsText, fillingsText, pastasText, notes].filter(Boolean).join("\n");
 
     onAddToCart(
       {
