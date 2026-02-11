@@ -118,8 +118,8 @@ export default function Home() {
 
       // 2. Generate WhatsApp Message
       const itemsList = data.items.map((item: any) =>
-        `${item.quantity}x ${item.name}${item.customization_text ? ` (${item.customization_text})` : ''}`
-      ).join('\n');
+        `- ${item.quantity}x ${item.name}${item.customization_text ? ` ${item.customization_text}` : ''}`
+      ).join('\n\n');
 
       const waveEmoji = String.fromCodePoint(0x1F44B);
       const clipboardEmoji = String.fromCodePoint(0x1F4CB);
@@ -147,8 +147,8 @@ export default function Home() {
 
       // Fallback: Open WhatsApp anyway
       const itemsList = data.items.map((item: any) =>
-        `${item.quantity}x ${item.name}`
-      ).join('\n');
+        `- ${item.quantity}x ${item.name}${item.customization_text ? ` ${item.customization_text}` : ''}`
+      ).join('\n\n');
 
       const waveEmoji = String.fromCodePoint(0x1F44B);
       const clipboardEmoji = String.fromCodePoint(0x1F4CB);
