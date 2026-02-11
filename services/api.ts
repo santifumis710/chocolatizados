@@ -57,7 +57,7 @@ export const deleteProduct = async (id: number) => {
 // Orders API
 
 export const createOrder = async (order: any) => {
-    const res = await fetch(`${API_URL}/api/orders/`, {
+    const res = await fetch(`${API_URL}/api/orders`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(order),
