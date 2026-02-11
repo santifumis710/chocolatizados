@@ -38,6 +38,38 @@ async def manual_seed():
     from app.utils import seed_products
     return seed_products()
 
+@app.get("/api/debug_env")
+async def debug_env():
+    """Debug environment variables and file system"""
+    import os
+    import sys
+    
+    cwd = os.getcwd()
+    ls_root = os.listdir(cwd)
+    
+    src_files = []
+    # Walk only 2 levels deep to avoid massive output
+    for root, dirs, files in os.walk(os.path.join(cwd, "src")):
+        if root.count(os.sep) - cwd.count(os.sep) > 3: continue
+        for file in files:
+            src_files.append(os.path.join(root, file))
+
+    try:
+        import fastapi
+        fastapi_version = fastapi.__version__
+    except ImportError:
+        fastapi_version = "MISSING"
+
+    return {
+        "status": "debug_env_active",
+        "cwd": cwd,
+        "root_files": ls_root,
+        "src_files_sample": src_files[:50],
+        "python_version": sys.version,
+        "fastapi_version": fastapi_version,
+        "sys_path": sys.path
+    }
+
 # CORS Configuration for Next.js frontend
 app.add_middleware(
     CORSMiddleware,
