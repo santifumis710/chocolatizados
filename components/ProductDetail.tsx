@@ -104,11 +104,11 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
 
     if (!isValid) return;
 
-    const flavorsText = selectedFlavors.length > 0 ? `Sabores: ${selectedFlavors.join(", ")}` : "";
-    const fillingsText = selectedFillings.length > 0 ? `Rellenos: ${selectedFillings.join(", ")}` : "";
-    const pastasText = selectedPastas.length > 0 ? `Pastas: ${selectedPastas.join(", ")}` : "";
+    const flavorsText = selectedFlavors.length > 0 ? `(Sabores: ${selectedFlavors.join(", ")})` : "";
+    const allFillings = [...selectedFillings, ...selectedPastas];
+    const fillingsText = allFillings.length > 0 ? `(Rellenos: ${allFillings.join(", ")})` : "";
 
-    const finalNotes = [flavorsText, fillingsText, pastasText, notes].filter(Boolean).join("\n");
+    const finalNotes = [flavorsText, fillingsText, notes].filter(Boolean).join("\n");
 
     onAddToCart(
       {
