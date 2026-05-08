@@ -1,14 +1,6 @@
-/**
- * Componente: ProductCard
- * 
- * Tarjeta simple que muestra el nombre del producto
- * Al hacer clic, abre el panel de detalles
- */
-
 "use client";
 
 import React from "react";
-import { colors, spacing, shadows, typography, borderRadius } from "@/theme";
 
 interface ProductCardProps {
   id: number;
@@ -32,79 +24,34 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <button
       onClick={() => onSelect(id)}
-      style={{
-        width: "100%",
-        padding: 0, // Remove padding to let image fill the card
-        backgroundColor: colors.white,
-        border: `2px solid ${colors.secondary}`,
-        borderRadius: borderRadius.lg,
-        cursor: "pointer",
-        transition: "all 0.3s ease",
-        boxShadow: shadows.sm,
-        textAlign: "center",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        overflow: "hidden", // Ensure image stays within border radius
-      }}
+      className="w-full p-0 bg-white border-2 border-secondary rounded-xl cursor-pointer transition-all duration-300 shadow-sm text-center flex flex-col items-center overflow-hidden"
     >
-      {/* Product Image - Full Width/Bleed */}
-      <div
-        style={{
-          width: "100%",
-          height: "200px", // Fixed height for consistency, or use aspect-ratio
-          backgroundColor: "#f0f0f0",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          borderBottom: `1px solid ${colors.border}`, // Optional separator
-        }}
-      >
+      <div className="w-full h-[200px] bg-[#f0f0f0] flex items-center justify-center border-b border-border">
         {!imgError && image_url ? (
           <img
             src={image_url}
             alt={name}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: imagePosition || "center center"
-            }}
+            className="w-full h-full object-cover"
+            style={{ objectPosition: imagePosition || "center center" }}
             onError={() => setImgError(true)}
           />
         ) : (
-          <span style={{ fontSize: "48px" }}>🍫</span>
+          <span className="text-5xl">🍫</span>
         )}
       </div>
 
-      {/* Content Section */}
-      <div style={{ padding: spacing.md, width: "100%" }}>
-        <h3
-          style={{
-            margin: `0 0 ${spacing.sm} 0`,
-            fontSize: typography.sizes.lg,
-            color: colors.primary,
-            fontWeight: "900",
-            fontFamily: typography.fontFamily,
-          }}
-        >
+      <div className="p-4 w-full">
+        <h3 className="m-0 mb-2 text-lg text-primary font-black font-sans">
           {name.split(/(\(.*?\))/).map((part, index) =>
             part.startsWith("(") && part.endsWith(")") ? (
-              <span key={index} style={{ whiteSpace: "nowrap" }}>{part}</span>
+              <span key={index} className="whitespace-nowrap">{part}</span>
             ) : (
               part
             )
           )}
         </h3>
-        <p
-          style={{
-            margin: 0,
-            fontSize: typography.sizes.base,
-            color: colors.textLight,
-            fontFamily: typography.fontFamily,
-          }}
-        >
-          ${price.toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+        <p className="m-0 text-base text-textLight font-sans">
+          ${price.toLocaleString("es-AR", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
         </p>
       </div>
     </button>

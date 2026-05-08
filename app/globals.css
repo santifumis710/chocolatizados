@@ -32,6 +32,28 @@ body {
   gap: 24px;
 }
 
+/* Category showcase */
+.showcase-section {
+  padding: 32px;
+}
+
+.showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.category-card-details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
 /* Hero section */
 .hero-background {
   background-color: #cdaa7d;
@@ -162,6 +184,14 @@ body {
     max-width: 90%;
     justify-content: center;
     border-radius: 50px;
+  }
+
+  .showcase-section { padding: 16px; }
+  .showcase-grid { grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); }
+  .category-card-details {
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
   }
 }
 

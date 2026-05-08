@@ -1,14 +1,7 @@
-/**
- * Componente: CartSidebar
- * 
- * Panel deslizable con items del carrito, resumen y checkout
- */
-
 "use client";
 
 import React from "react";
 import { CartItem } from "@/hooks/useCart";
-import { colors, spacing, typography, shadows, borderRadius } from "@/theme";
 
 interface CartSidebarProps {
   items: CartItem[];
@@ -26,317 +19,115 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
   onRemoveItem,
   onUpdateQuantity,
   onCheckout,
-}) => {
-  return (
-    <>
-      {/* Overlay */}
-      <div
-        onClick={onClose}
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: "rgba(0, 0, 0, 0.3)",
-          zIndex: 999,
-        }}
-      />
+}) => (
+  <>
+    <div
+      onClick={onClose}
+      className="fixed inset-0 bg-black/30 z-[999]"
+    />
 
-      {/* Sidebar */}
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          right: 0,
-          height: "100dvh", // Use dynamic viewport height for mobile browsers
-          width: "400px",
-          maxWidth: "100%",
-          backgroundColor: colors.white,
-          boxShadow: shadows.lg,
-          zIndex: 1000,
-          display: "flex",
-          flexDirection: "column",
-          overflowY: "auto",
-        }}
-      >
-        {/* Header */}
-        <div
-          style={{
-            padding: spacing.lg,
-            borderBottom: `1px solid ${colors.border}`,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <h2
-            style={{
-              margin: 0,
-              fontSize: typography.sizes.xl,
-              color: colors.primary,
-            }}
-          >
-            Tu Carrito
-          </h2>
-          <button
-            onClick={onClose}
-            style={{
-              background: "none",
-              border: "none",
-              fontSize: "24px",
-              cursor: "pointer",
-              color: colors.text,
-            }}
-          >
-            ✕
-          </button>
-        </div>
-
-        {/* Items */}
-        <div
-          style={{
-            flex: 1,
-            padding: spacing.lg,
-            overflowY: "auto",
-          }}
-        >
-          {items.length === 0 ? (
-            <div
-              style={{
-                textAlign: "center",
-                color: colors.textLight,
-                padding: spacing.lg,
-              }}
-            >
-              <div style={{ fontSize: "40px", marginBottom: spacing.md }}>🍫</div>
-              <p>Tu carrito está vacío</p>
-              <p style={{ fontSize: typography.sizes.sm }}>
-                Agrega algunos chocolates deliciosos!
-              </p>
-            </div>
-          ) : (
-            items.map((item) => (
-              <div
-                key={`${item.product_id}-${item.customization_text || "default"}`}
-                style={{
-                  marginBottom: spacing.lg,
-                  paddingBottom: spacing.md,
-                  borderBottom: `1px solid ${colors.border}`,
-                }}
-              >
-                {/* Nombre */}
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginBottom: spacing.sm,
-                  }}
-                >
-                  <h4
-                    style={{
-                      margin: 0,
-                      fontSize: typography.sizes.base,
-                      color: colors.text,
-                    }}
-                  >
-                    {item.name}
-                  </h4>
-                  <button
-                    onClick={() =>
-                      onRemoveItem(item.product_id, item.customization_text)
-                    }
-                    style={{
-                      background: "none",
-                      border: "none",
-                      color: colors.error,
-                      cursor: "pointer",
-                      fontSize: typography.sizes.sm,
-                      textDecoration: "underline",
-                    }}
-                  >
-                    Eliminar
-                  </button>
-                </div>
-
-                {/* Personalización */}
-                {item.customization_text && (
-                  <p
-                    style={{
-                      margin: `0 0 ${spacing.sm} 0`,
-                      fontSize: typography.sizes.xs,
-                      color: colors.textLight,
-                      fontStyle: "italic",
-                      padding: spacing.sm,
-                      backgroundColor: colors.background,
-                      borderRadius: borderRadius.md,
-                    }}
-                  >
-                    ✨ {item.customization_text}
-                  </p>
-                )}
-
-                {/* Precio unitario */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <p
-                    style={{
-                      margin: `0 0 ${spacing.sm} 0`,
-                      fontSize: typography.sizes.sm,
-                      color: colors.textLight,
-                    }}
-                  >
-                    ${item.price.toFixed(2)} c/u
-                  </p>
-                  {item.min_quantity && item.min_quantity > 1 && (
-                    <span style={{ fontSize: typography.sizes.xs, color: colors.secondary, fontWeight: 'bold' }}>
-                      (Min: {item.min_quantity})
-                    </span>
-                  )}
-                </div>
-
-                {/* Cantidad */}
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: spacing.sm,
-                  }}
-                >
-                  <button
-                    onClick={() => {
-                      const min = item.min_quantity || 1;
-                      if (item.quantity - 1 < min) {
-                        onRemoveItem(item.product_id, item.customization_text);
-                      } else {
-                        onUpdateQuantity(
-                          item.product_id,
-                          item.quantity - 1,
-                          item.customization_text
-                        )
-                      }
-                    }}
-                    style={{
-                      backgroundColor: colors.background,
-                      border: `1px solid ${colors.border}`,
-                      borderRadius: borderRadius.md,
-                      width: "30px",
-                      height: "30px",
-                      cursor: "pointer",
-                      fontSize: typography.sizes.base,
-                    }}
-                  >
-                    −
-                  </button>
-                  <span
-                    style={{
-                      flex: 1,
-                      textAlign: "center",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {item.quantity}
-                  </span>
-                  <button
-                    onClick={() =>
-                      onUpdateQuantity(
-                        item.product_id,
-                        item.quantity + 1,
-                        item.customization_text
-                      )
-                    }
-                    style={{
-                      backgroundColor: colors.background,
-                      border: `1px solid ${colors.border}`,
-                      borderRadius: borderRadius.md,
-                      width: "30px",
-                      height: "30px",
-                      cursor: "pointer",
-                      fontSize: typography.sizes.base,
-                    }}
-                  >
-                    +
-                  </button>
-                  <span
-                    style={{
-                      fontWeight: "bold",
-                      color: colors.primary,
-                      minWidth: "80px",
-                      textAlign: "right",
-                    }}
-                  >
-                    ${(item.price * item.quantity).toFixed(2)}
-                  </span>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
-        {/* Footer */}
-        <div
-          style={{
-            padding: spacing.lg,
-            paddingBottom: "calc(30px + env(safe-area-inset-bottom))", // Ensure buttons are above Safari bar
-            borderTop: `1px solid ${colors.border}`,
-            backgroundColor: colors.background,
-          }}
-        >
-          {/* Total */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: spacing.lg,
-              fontSize: typography.sizes.lg,
-              fontWeight: "bold",
-            }}
-          >
-            <span>Total:</span>
-            <span style={{ color: colors.primary }}>
-              ${total.toFixed(2)}
-            </span>
-          </div>
-
-          {/* Botón Checkout */}
-          <button
-            onClick={onCheckout}
-            disabled={items.length === 0}
-            style={{
-              width: "100%",
-              padding: spacing.md,
-              backgroundColor:
-                items.length === 0 ? colors.textLight : colors.primary,
-              color: colors.white,
-              border: "none",
-              borderRadius: borderRadius.md,
-              fontSize: typography.sizes.base,
-              fontWeight: "bold",
-              cursor: items.length === 0 ? "not-allowed" : "pointer",
-              transition: "background-color 0.3s ease",
-            }}
-          >
-            📲 Continuar por Whatsapp
-          </button>
-
-          <button
-            onClick={onClose}
-            style={{
-              width: "100%",
-              marginTop: spacing.md,
-              padding: spacing.md,
-              backgroundColor: colors.white,
-              color: colors.primary,
-              border: `1px solid ${colors.primary}`,
-              borderRadius: borderRadius.md,
-              fontSize: typography.sizes.base,
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-            }}
-          >
-            Seguir comprando
-          </button>
-        </div>
+    <div className="fixed top-0 right-0 h-[100dvh] w-[400px] max-w-full bg-white shadow-lg z-[1000] flex flex-col overflow-y-auto">
+      <div className="p-6 border-b border-border flex justify-between items-center">
+        <h2 className="m-0 text-xl text-primary">Tu Carrito</h2>
+        <button onClick={onClose} className="bg-transparent border-none text-2xl cursor-pointer text-text">
+          ✕
+        </button>
       </div>
-    </>
-  );
-};
+
+      <div className="flex-1 p-6 overflow-y-auto">
+        {items.length === 0 ? (
+          <div className="text-center text-textLight p-6">
+            <div className="text-[40px] mb-4">🍫</div>
+            <p>Tu carrito está vacío</p>
+            <p className="text-sm">Agrega algunos chocolates deliciosos!</p>
+          </div>
+        ) : (
+          items.map((item) => (
+            <div
+              key={`${item.product_id}-${item.customization_text || "default"}`}
+              className="mb-6 pb-4 border-b border-border"
+            >
+              <div className="flex justify-between mb-2">
+                <h4 className="m-0 text-base text-text">{item.name}</h4>
+                <button
+                  onClick={() => onRemoveItem(item.product_id, item.customization_text)}
+                  className="bg-transparent border-none text-error cursor-pointer text-sm underline"
+                >
+                  Eliminar
+                </button>
+              </div>
+
+              {item.customization_text && (
+                <p className="my-0 mb-2 text-xs text-textLight italic p-2 bg-background rounded">
+                  ✨ {item.customization_text}
+                </p>
+              )}
+
+              <div className="flex justify-between items-center">
+                <p className="my-0 mb-2 text-sm text-textLight">${item.price.toFixed(2)} c/u</p>
+                {item.min_quantity && item.min_quantity > 1 && (
+                  <span className="text-xs text-secondary font-bold">
+                    (Min: {item.min_quantity})
+                  </span>
+                )}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    const min = item.min_quantity || 1;
+                    if (item.quantity - 1 < min) {
+                      onRemoveItem(item.product_id, item.customization_text);
+                    } else {
+                      onUpdateQuantity(item.product_id, item.quantity - 1, item.customization_text);
+                    }
+                  }}
+                  className="bg-background border border-border rounded w-[30px] h-[30px] cursor-pointer text-base"
+                >
+                  −
+                </button>
+                <span className="flex-1 text-center font-bold">{item.quantity}</span>
+                <button
+                  onClick={() =>
+                    onUpdateQuantity(item.product_id, item.quantity + 1, item.customization_text)
+                  }
+                  className="bg-background border border-border rounded w-[30px] h-[30px] cursor-pointer text-base"
+                >
+                  +
+                </button>
+                <span className="font-bold text-primary min-w-[80px] text-right">
+                  ${(item.price * item.quantity).toFixed(2)}
+                </span>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      <div
+        className="p-6 border-t border-border bg-background"
+        style={{ paddingBottom: "calc(30px + env(safe-area-inset-bottom))" }}
+      >
+        <div className="flex justify-between mb-6 text-lg font-bold">
+          <span>Total:</span>
+          <span className="text-primary">${total.toFixed(2)}</span>
+        </div>
+
+        <button
+          onClick={onCheckout}
+          disabled={items.length === 0}
+          className="w-full p-4 text-white border-none rounded text-base font-bold transition-colors duration-300 disabled:bg-textLight disabled:cursor-not-allowed bg-primary cursor-pointer"
+        >
+          📲 Continuar por Whatsapp
+        </button>
+
+        <button
+          onClick={onClose}
+          className="w-full mt-4 p-4 bg-white text-primary border border-primary rounded text-base cursor-pointer transition-all duration-300"
+        >
+          Seguir comprando
+        </button>
+      </div>
+    </div>
+  </>
+);
