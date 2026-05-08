@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Source_Sans_3, Playfair_Display } from "next/font/google";
 import type { Metadata } from "next";
+import "./globals.css";
 
 const sourceSans = Source_Sans_3({
   subsets: ["latin"],

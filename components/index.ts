@@ -8,6 +8,9 @@ export { CartWidget } from "./CartWidget";
 export { CartSidebar } from "./CartSidebar";
 export { CheckoutModal } from "./CheckoutModal";
 export { ProductDetail } from "./ProductDetail";
+export { Header } from "./Header";
+export { Hero } from "./Hero";
+export { Storefront } from "./Storefront";
 
 // Tipos
 export type { CartItem } from "@/hooks/useCart";
