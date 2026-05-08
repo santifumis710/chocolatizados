@@ -9,7 +9,6 @@ import { CartSidebar } from "@/components/CartSidebar";
 import { CheckoutModal } from "@/components/CheckoutModal";
 import { ProductDetail } from "@/components/ProductDetail";
 import { useCart, CartItem } from "@/hooks/useCart";
-import { colors, typography } from "@/theme";
 import { createOrder, fetchProducts } from "@/services/api";
 
 interface Product {
@@ -105,14 +104,7 @@ export default function Home() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundColor: colors.background,
-        fontFamily: typography.fontFamily,
-        color: colors.text,
-      }}
-    >
+    <div className="min-h-screen bg-background text-text font-sans">
       {toastState !== "hidden" && (
         <div className={`toast-notification ${toastState === "visible" ? "toast-entering" : "toast-exiting"}`}>
           <span>✅</span>

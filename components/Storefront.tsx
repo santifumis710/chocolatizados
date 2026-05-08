@@ -1,7 +1,6 @@
 "use client";
 
 import { ProductCard } from "@/components/ProductCard";
-import { colors, spacing, typography } from "@/theme";
 
 interface Product {
   id: number;
@@ -33,22 +32,14 @@ export const Storefront = ({
 
   return (
     <main className="main-content">
-      <div style={{ marginBottom: spacing.lg }}>
-        <h2 style={{ color: colors.primary, fontSize: typography.sizes.xl, fontWeight: 900 }}>
+      <div className="mb-6">
+        <h2 className="text-primary text-xl font-black">
           {selectedCategory ? `Catálogo: ${selectedCategory}` : "Catálogo Completo"}
         </h2>
         {selectedCategory && (
           <button
             onClick={onClearCategory}
-            style={{
-              padding: "8px 16px",
-              backgroundColor: "transparent",
-              border: `1px solid ${colors.primary}`,
-              color: colors.primary,
-              borderRadius: "20px",
-              cursor: "pointer",
-              marginTop: spacing.sm,
-            }}
+            className="mt-2 px-4 py-2 bg-transparent border border-primary text-primary rounded-full cursor-pointer"
           >
             ← Ver todos
           </button>
@@ -56,29 +47,13 @@ export const Storefront = ({
       </div>
 
       {loading ? (
-        <div
-          style={{
-            textAlign: "center",
-            padding: spacing.xl,
-            fontSize: typography.sizes.lg,
-            color: colors.textLight,
-          }}
-        >
-          Cargando productos...
-        </div>
+        <div className="text-center p-8 text-lg text-textLight">Cargando productos...</div>
       ) : filtered.length === 0 ? (
-        <div
-          style={{
-            textAlign: "center",
-            padding: spacing.xl,
-            fontSize: typography.sizes.lg,
-            color: colors.textLight,
-          }}
-        >
+        <div className="text-center p-8 text-lg text-textLight">
           No hay productos disponibles en esta categoría.
         </div>
       ) : (
-        <div className="product-grid" style={{ display: "grid" }}>
+        <div className="product-grid grid">
           {filtered.map((product) => (
             <ProductCard
               key={product.id}

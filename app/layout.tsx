@@ -25,9 +25,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es" className={`${sourceSans.variable} ${playfair.variable}`}>
-      <body style={{ margin: 0, padding: 0 }}>
-        {children}
-      </body>
+      <body className="font-sans text-text bg-background m-0 p-0">{children}</body>
     </html>
   );
 }

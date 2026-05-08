@@ -1,32 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { CartWidget } from "@/components/CartWidget";
-import { colors, spacing } from "@/theme";
 
-const SocialIcon = ({ href, children }: { href: string; children: React.ReactNode }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        color: colors.primary,
-        display: "flex",
-        alignItems: "center",
-        textDecoration: "none",
-        transition: "transform 0.2s ease",
-        transform: isHovered ? "scale(1.2)" : "scale(1)",
-        padding: spacing.xs,
-      }}
-    >
-      {children}
-    </a>
-  );
-};
+const SocialIcon = ({ href, children }: { href: string; children: React.ReactNode }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-primary flex items-center no-underline p-1 transition-transform duration-200 hover:scale-125"
+  >
+    {children}
+  </a>
+);
 
 interface HeaderProps {
   itemCount: number;
@@ -34,28 +20,18 @@ interface HeaderProps {
 }
 
 export const Header = ({ itemCount, onCartClick }: HeaderProps) => (
-  <header
-    style={{
-      backgroundColor: colors.white,
-      borderBottom: `1px solid ${colors.border}`,
-      padding: spacing.md,
-      position: "sticky",
-      top: 0,
-      zIndex: 100,
-      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-    }}
-  >
-    <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: spacing.md }}>
+  <header className="sticky top-0 z-[100] bg-white border-b border-border p-4 shadow-[0_2px_4px_rgba(0,0,0,0.1)]">
+    <div className="max-w-[1200px] mx-auto">
+      <div className="flex justify-between items-center w-full">
+        <div className="flex items-center gap-4">
           <img
             src="/logo.jpg"
             alt="Chocolatizados Logo"
-            style={{ height: "60px", width: "auto", borderRadius: "8px" }}
+            className="h-[60px] w-auto rounded-lg"
           />
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: spacing.sm }}>
+        <div className="flex items-center gap-2">
           <SocialIcon href="https://www.instagram.com/chocolatizados/">
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -1,15 +1,6 @@
 "use client";
 
-import { spacing, typography } from "@/theme";
-
-const paragraphStyle: React.CSSProperties = {
-  fontSize: typography.sizes.lg,
-  lineHeight: 1.8,
-  fontStyle: "italic",
-  textAlign: "justify",
-  textIndent: spacing.xl,
-  margin: 0,
-};
+const PARAGRAPH = "text-lg leading-[1.8] italic text-justify indent-8 m-0";
 
 export const Hero = () => (
   <section className="hero-background">
@@ -19,28 +10,26 @@ export const Hero = () => (
           <img
             src="/images/hero_madre_16_9.jpg"
             alt="Chocolate artesanal - Día de la Madre"
-            className="hero-img"
-            style={{ borderRadius: "16px" }}
+            className="hero-img rounded-2xl"
           />
         </div>
         <div className="hero-col hero-text-right">
-          <p style={paragraphStyle}>
+          <p className={PARAGRAPH}>
             Cuando una persona o empresa quiere agasajar a sus invitados o clientes, nada mejor que hacerlo con un producto tentador como es el chocolate... personalizando su envoltorio. Mas allá de lo emotivo, endulzarle el día a alguien querido es un acto totalmente grato, tanto para el que recibe el regalo como para el que lo brinda.
           </p>
         </div>
       </div>
 
       <div className="hero-row" style={{ flexDirection: "row-reverse" }}>
-        <div className="hero-col" style={{ display: "flex", justifyContent: "center" }}>
+        <div className="hero-col flex justify-center">
           <img
             src="/images/marie.jpg"
             alt="Mariela"
-            className="hero-img"
-            style={{ borderRadius: "16px", maxWidth: "70%", height: "auto" }}
+            className="hero-img rounded-2xl max-w-[70%] h-auto"
           />
         </div>
         <div className="hero-col hero-text-left">
-          <p style={paragraphStyle}>
+          <p className={PARAGRAPH}>
             Soy Mariela, la persona detrás de Chocolatizados. Hace mas de 18 años nació este emprendimiento, que permite transformar chocolate verdadero en momentos únicos. Mi intención es lograr que lo que quieras decir, lo digas con chocolates.
           </p>
         </div>
@@ -51,12 +40,11 @@ export const Hero = () => (
           <img
             src="/images/products/hero-bombones.jpg"
             alt="Bombones premium"
-            className="hero-img"
-            style={{ borderRadius: "16px" }}
+            className="hero-img rounded-2xl"
           />
         </div>
         <div className="hero-col hero-text-right">
-          <p style={paragraphStyle}>
+          <p className={PARAGRAPH}>
             Elegí chocolate de verdad! El chocolate genuino y el baño de reposteria pueden parecer similares a primera vista, pero sus diferencias son significativas, podés reconocerlo porque el verdadero chocolate no deja una sensación de grasitud en el paladar, es rígido, crocante y brilloso, tiene un sabor y aroma diferencial... y se funde de manera agradable en tu boca.
           </p>
         </div>
