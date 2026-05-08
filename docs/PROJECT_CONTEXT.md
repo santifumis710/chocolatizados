@@ -32,65 +32,68 @@ Live URL: https://chocolatizados.vercel.app
 
 ```
 / (project root = Next.js root)
-├── app/                        # Next.js App Router pages
-│   ├── layout.tsx              # Root layout (fonts, metadata)
-│   ├── page.tsx                # Main storefront (1 big file, ~600 lines)
-│   ├── globals.css             # Minimal global CSS
+├── app/
+│   ├── layout.tsx              # Root layout (next/font, metadata, imports globals.css)
+│   ├── page.tsx                # Storefront orchestrator: data fetch + cart/modal state
+│   ├── globals.css             # Tailwind directives + .hero-* / .toast / .product-grid
 │   └── admin/
-│       ├── layout.tsx          # Admin layout wrapper
-│       ├── login/page.tsx      # Admin login (password-based)
-│       ├── page.tsx            # Admin dashboard (products/orders/stats tabs)
-│       ├── ProductModal.tsx    # Create/edit product modal
-│       ├── OrdersTable.tsx     # Orders list with status filters
-│       └── StatsView.tsx       # Basic stats view
+│       ├── layout.tsx          # Auth gate (redirects to /admin/login if no token)
+│       ├── login/page.tsx      # Login form → POST /api/admin/login
+│       ├── page.tsx            # Tabbed dashboard (products / orders / stats)
+│       ├── ProductModal.tsx
+│       ├── OrdersTable.tsx
+│       └── StatsView.tsx
 ├── components/
-│   ├── ProductCard.tsx         # Grid card (image + name + price)
-│   ├── ProductDetail.tsx       # Right-side panel (flavor/filling/qty/notes)
-│   ├── CartSidebar.tsx         # Right-side cart panel
-│   ├── CartWidget.tsx          # Cart icon + badge in header
-│   ├── CategoryShowcase.tsx    # Horizontal category cards with flavor swatches
-│   └── index.ts                # Re-exports
+│   ├── Header.tsx              # Sticky header: logo, social icons, CartWidget
+│   ├── Hero.tsx                # Three image+text rows
+│   ├── Storefront.tsx          # Catalog title + product grid + loading/empty
+│   ├── ProductCard.tsx
+│   ├── ProductDetail.tsx       # Right-slide panel: qty, flavors, fillings, notes
+│   ├── CartSidebar.tsx
+│   ├── CartWidget.tsx
+│   ├── CheckoutModal.tsx       # Two-step form (info → confirmation → WhatsApp)
+│   ├── CategoryShowcase.tsx    # Fetches /api/categories on mount
+│   └── index.ts
 ├── hooks/
-│   ├── useCart.ts              # Cart logic (localStorage-backed)
+│   ├── useCart.ts              # localStorage-backed cart with min_quantity handling
 │   └── index.ts
 ├── services/
-│   └── api.ts                  # All API calls (fetchProducts, createOrder, etc.)
-├── utils/
-│   └── whatsapp.ts             # WhatsApp URL helpers (UNUSED — see Issues)
-├── data/
-│   └── productTypes.ts         # Hardcoded category definitions for CategoryShowcase
-├── theme.ts                    # Design tokens: colors, spacing, typography, shadows
-├── tailwind.config.js          # Installed but mostly unused
+│   └── api.ts                  # fetchProducts, fetchCategories, login, adminFetch helpers
+├── tailwind.config.js          # Color/spacing/typography tokens (single source of truth)
 ├── postcss.config.js
 ├── tsconfig.json
 ├── package.json
+├── .env.example                # Documents ADMIN_PASSWORD etc.
 ├── vercel.json                 # { rewrites: [{ /api/(.*) → /api/index.py }] }
+├── .vercelignore               # Excludes assets-raw/, docs/ from build upload
 ├── api/
-│   ├── index.py                # Vercel serverless entry: imports src/backend/main.py
-│   └── requirements.txt        # Duplicate of src/backend/requirements.txt
+│   └── index.py                # Vercel serverless entry: imports src/backend/main.py
+├── requirements.txt            # Python deps used by Vercel
 ├── src/backend/
-│   ├── main.py                 # FastAPI app creation, CORS, route registration
-│   ├── requirements.txt        # fastapi, uvicorn, sqlalchemy, psycopg2-binary, etc.
-│   ├── data/products.json      # Seed data (~25 products)
-│   ├── migrate_products.py     # One-off migration script (no longer needed)
-│   ├── test_db.py              # Dev DB test script (no longer needed)
+│   ├── main.py                 # FastAPI app, CORS, route registration
+│   ├── requirements.txt        # Backend deps (kept in sync with root requirements.txt)
+│   ├── data/
+│   │   ├── products.json       # Seed data (~25 products) — used on cold start when DB empty
+│   │   └── categories.json     # Category metadata served by /api/categories
 │   └── app/
 │       ├── db.py               # SQLAlchemy engine, ProductModel, OrderModel
 │       ├── utils.py            # seed_products() — fills DB from products.json if empty
-│       ├── models/schemas.py   # Pydantic schemas: Product, CartItem, CheckoutRequest, etc.
+│       ├── auth.py             # HMAC-SHA256 token issue/verify, require_admin dependency
+│       ├── models/schemas.py   # Just `Product` schema now
 │       └── routes/
-│           ├── products.py     # CRUD: GET/POST/PUT/DELETE /api/products
-│           ├── orders.py       # CRUD: GET/POST/PUT/DELETE /api/orders
-│           └── whatsapp.py     # POST /api/whatsapp/generate-link (UNUSED by frontend)
+│           ├── products.py     # CRUD /api/products (mutations require admin)
+│           ├── orders.py       # CRUD /api/orders (POST is public, others require admin)
+│           ├── auth.py         # POST /api/admin/login → bearer token
+│           └── categories.py   # GET /api/categories (read-only, JSON-backed)
+├── assets-raw/                 # Originals not shipped to Vercel (.vercelignore'd)
 └── public/
     ├── logo.jpg
     ├── favicon.png
-    ├── products.json           # STALE leftover from old static approach (ignored)
     └── images/
         ├── hero_madre_16_9.jpg
-        ├── marie.jpg           # Photo of Mariela
-        ├── hero-pattern-v2.png # Decorative hero background
-        └── products/           # ~80 product images (real photos + AI-generated pastels)
+        ├── marie.jpg
+        ├── hero-pattern-v2.png
+        └── products/           # ~80 product images
 ```
 
 ---
@@ -116,20 +119,21 @@ Live URL: https://chocolatizados.vercel.app
 
 ## Backend API Endpoints
 
-| Method | Path | Description |
-|---|---|---|
-| GET | `/api/health` | Health check |
-| GET | `/api/products` | List all visible products |
-| POST | `/api/products/` | Create product (admin) |
-| PUT | `/api/products/{id}` | Update product (admin) |
-| DELETE | `/api/products/{id}` | Delete product (admin) |
-| GET | `/api/orders` | List all orders (admin) |
-| POST | `/api/orders` | Create order |
-| PUT | `/api/orders/{id}/status` | Update order status (admin) |
-| DELETE | `/api/orders/{id}` | Delete order (admin) |
-| POST | `/api/whatsapp/generate-link` | Generate WhatsApp URL (**UNUSED by frontend**) |
-| GET | `/api/debug_env` | Debug info (**should be removed in prod**) |
-| GET | `/seed` | Manual DB seed trigger (**should be removed in prod**) |
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| GET | `/api/health` | – | Health check |
+| GET | `/api/products` | – | List all products |
+| POST | `/api/products/` | admin | Create product |
+| PUT | `/api/products/{id}` | admin | Update product |
+| DELETE | `/api/products/{id}` | admin | Delete product |
+| GET | `/api/orders` | admin | List all orders |
+| POST | `/api/orders` | – | Create order (customer checkout) |
+| PUT | `/api/orders/{id}/status` | admin | Update order status |
+| DELETE | `/api/orders/{id}` | admin | Delete order |
+| POST | `/api/admin/login` | – | Validates ADMIN_PASSWORD, returns bearer token |
+| GET | `/api/categories` | – | Category metadata (weight/size/flavor preview images) |
+
+Admin auth flow: client POSTs `{password}` to `/api/admin/login` → backend issues an HMAC-SHA256-signed bearer token (7-day TTL). The HMAC key is derived from `ADMIN_PASSWORD`, so rotating the password invalidates every outstanding session. `services/api.ts:adminFetch` attaches `Authorization: Bearer <token>` to admin-only calls and redirects to `/admin/login` on a 401.
 
 ---
 
@@ -180,17 +184,23 @@ total           Float
 
 ---
 
-## Design Tokens (`theme.ts`)
+## Design Tokens (`tailwind.config.js`)
 
-```ts
-colors.primary   = "#A83A2B"   // Brand Red (chocolate)
-colors.secondary = "#CDAA7D"   // Brand Gold/Tan
-colors.background= "#F5E6D3"   // Brand Cream
-colors.text      = "#333333"
-colors.white     = "#FFFFFF"
-colors.error     = "#D32F2F"
-colors.border    = "#DDD9CF"
+```js
+colors.primary    = "#A83A2B"  // Brand Red (chocolate)
+colors.secondary  = "#CDAA7D"  // Brand Gold/Tan
+colors.background = "#F5E6D3"  // Brand Cream
+colors.text       = "#333333"
+colors.textLight  = "#666666"
+colors.error      = "#D32F2F"
+colors.success    = "#388E3C"
+colors.border     = "#DDD9CF"
+
+fontFamily.sans  = var(--font-source-sans)
+fontFamily.serif = var(--font-playfair)
 ```
+
+Spacing follows Tailwind defaults (`p-1`=4px, `p-2`=8px, `p-4`=16px, `p-6`=24px, `p-8`=32px, `p-12`=48px). `text-xl` and `text-2xl` are overridden to match the prior design (24px / 32px).
 
 ---
 
@@ -205,67 +215,13 @@ colors.border    = "#DDD9CF"
 
 ---
 
-## Known Issues & Problems
+## Known Issues & Improvement Opportunities
 
-### 🟡 Architecture / Design Debt
-
-3. **`/api/whatsapp/generate-link` is dead code**: The frontend builds the WhatsApp URL directly in `app/page.tsx:handleCheckoutComplete()` and never calls this backend endpoint. Either use the backend endpoint or delete it.
-
-4. **Duplicate WhatsApp message logic**: WhatsApp message formatting exists in both `src/backend/app/routes/whatsapp.py` (unused) and `app/page.tsx` (used). They're not identical — the backend version is more structured.
-
-5. **`utils/whatsapp.ts` is likely dead**: Utility functions for WhatsApp URL generation at the root level, but the actual message building happens inline in `page.tsx`.
-
-6. **`data/productTypes.ts` duplicates DB data**: Product categories, weights, and image paths are hardcoded in this file for the `CategoryShowcase` component. If product categories change in the DB, this file won't update automatically.
-
-7. **`app/page.tsx` is too large**: ~600 lines. The header, hero section, category filter, product grid, and all modal state live in one component. Should be split.
-
-8. **Inline styles everywhere**: Despite Tailwind being installed, all styling is done via inline `style={{}}` objects. This makes the code verbose and hard to maintain.
-
-9. **`public/products.json`**: Stale leftover from before the DB was implemented. No code reads it in production.
-
-### 🟢 Junk Files to Delete
-
-```
-/token.json                    # Google OAuth token — abandoned Google Sheets integration
-/.tmp/                         # All temp scripts and CSVs (already gitignored)
-/_docs/                        # Old agent prompts (AGENTS.md, GEMINI.md) for other AIs
-/directives/                   # AI prompt files for image generation workflows
-/execution/                    # One-off dev scripts (import CSV, sync sheets, etc.)
-/api/debug_simple.py           # Debug script
-/api/requirements.txt          # Duplicate of src/backend/requirements.txt
-/src/backend/test_db.py        # Dev script
-/src/backend/migrate_products.py # One-off migration (already run)
-/ACTIVAR_GOOGLE_SHEETS.md      # Abandoned Google Sheets docs
-/DESCARGAR_CREDENTIALS.md      # Abandoned Google Sheets docs
-/GOOGLE_SHEETS_INTEGRATION.md  # Abandoned Google Sheets docs
-/SETUP_GOOGLE_SHEETS.md        # Abandoned Google Sheets docs
-/INDICE.md                     # Old project index for AI agents
-/LISTO.md                      # Old status doc
-/RAPIDO.md                     # Old quick-ref doc
-/VERIFICACION.md               # Old verification doc
-/START_HERE.md                 # Old setup guide
-/Procfile                      # Railway deployment (now on Vercel)
-/foto dia de la madre.jpeg     # Raw photo in root
-/logo chocolatizados.jpg       # Raw photo in root
-/catalogo/                     # Raw catalog photos (gitignored)
-/public/products.json          # Stale static fallback
-```
-
----
-
-## Improvement Opportunities (for Opus to evaluate)
-
-1. **Split `app/page.tsx`** into `Header`, `Hero`, `Storefront` components
-2. **Replace inline styles with Tailwind** — Tailwind is already installed
-3. **Use the backend WhatsApp endpoint** (or delete it if keeping frontend-only)
-4. **Secure admin panel** — server-side auth, not localStorage password
-5. **Remove debug/seed endpoints** from production
-6. **Delete the ~30 junk files** listed above
-7. **Make CategoryShowcase data-driven** — fetch categories from DB instead of hardcoding in `productTypes.ts`
-8. **Product detail panel** shows no product image — only text + flavor/filling selection. Could show the product image.
-9. **No loading states in admin** — admin actions don't have proper loading/error feedback
-10. **`options` field format** (`"Label|price, Label2|price2"`) is fragile string parsing — could be a proper JSON array
-11. **Cart does not handle the case where a product's price changes** between sessions (stale localStorage)
+1. **Product detail panel shows no product image** — only text + flavor/filling selection. The product photo would help visual confirmation.
+2. **No loading/error states in admin** — admin actions show `alert()` rather than inline feedback.
+3. **`options` field format** (`"Label|price, Label2|price2"`) is fragile string parsing. Promoting to JSON array would also let admin edit it cleanly.
+4. **Cart doesn't handle product price changes between sessions** (stale localStorage).
+5. **Category metadata is JSON-on-disk** (`src/backend/data/categories.json`). Promoting to a DB table + admin UI is the natural next step if Mariela ever needs to edit it without a deploy.
 
 ---
 
