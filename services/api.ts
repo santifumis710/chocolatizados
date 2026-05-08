@@ -48,6 +48,12 @@ export const fetchProducts = async () => {
     return res.json();
 };
 
+export const fetchCategories = async () => {
+    const res = await fetch(`${API_URL}/api/categories/`);
+    if (!res.ok) throw new Error('Failed to fetch categories');
+    return res.json();
+};
+
 export const createProduct = async (product: any) => {
     const res = await adminFetch(`${API_URL}/api/products/`, {
         method: 'POST',

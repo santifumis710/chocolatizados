@@ -1,6 +1,18 @@
-import React, { useState } from "react";
-import { productTypes, ProductType } from "@/data/productTypes";
+import React, { useEffect, useState } from "react";
+import { fetchCategories } from "@/services/api";
 import { colors, spacing, typography } from "@/theme";
+
+export interface ProductType {
+    id: string;
+    title: string;
+    weight: string;
+    size: string;
+    images: {
+        semi: string;
+        white: string;
+        milk: string;
+    };
+}
 
 interface CategoryShowcaseProps {
     selectedCategory: string | null;
@@ -221,6 +233,16 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
     selectedCategory,
     onSelectCategory,
 }) => {
+    const [productTypes, setProductTypes] = useState<ProductType[]>([]);
+
+    useEffect(() => {
+        fetchCategories()
+            .then(setProductTypes)
+            .catch((err) => console.error("Error loading categories:", err));
+    }, []);
+
+    if (productTypes.length === 0) return null;
+
     return (
         <section
             className="showcase-section"
