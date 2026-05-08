@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { checkAuth } from '@/services/api';
-import { colors } from '@/theme';
 
 export default function AdminLayout({
     children,
@@ -15,7 +14,6 @@ export default function AdminLayout({
     const [authorized, setAuthorized] = useState(false);
 
     useEffect(() => {
-        // Allow access to login page without check
         if (pathname === '/admin/login') {
             setAuthorized(true);
             return;
@@ -28,11 +26,7 @@ export default function AdminLayout({
         }
     }, [pathname]);
 
-    if (!authorized) return null; // or a loading spinner
+    if (!authorized) return null;
 
-    return (
-        <div style={{ backgroundColor: colors.background, minHeight: '100vh' }}>
-            {children}
-        </div>
-    );
+    return <div className="bg-background min-h-screen">{children}</div>;
 }

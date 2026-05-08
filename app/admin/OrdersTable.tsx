@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { fetchOrders, updateOrderStatus, deleteOrder } from "@/services/api";
-import { colors, spacing, typography, borderRadius } from "@/theme";
+
+const STATUS_BG: Record<string, string> = {
+    pending: "#FFF9C4",
+    completed: "#C8E6C9",
+    cancelled: "#FFCDD2",
+};
 
 export const OrdersTable = () => {
     const [orders, setOrders] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
     const [filterStatus, setFilterStatus] = useState<string>("all");
-
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case "pending": return "#FFF9C4"; // Lys gul
-            case "completed": return "#C8E6C9"; // Lys grøn
-            case "cancelled": return "#FFCDD2"; // Lys rød
-            default: return colors.white;
-        }
-    };
 
     useEffect(() => {
         loadOrders();
@@ -24,8 +20,9 @@ export const OrdersTable = () => {
     const loadOrders = async () => {
         try {
             const data = await fetchOrders();
-            // Sort by date desc
-            setOrders(data.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()));
+            setOrders(
+                data.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
+            );
             setLoading(false);
         } catch (err) {
             console.error(err);
@@ -38,7 +35,7 @@ export const OrdersTable = () => {
         try {
             await updateOrderStatus(id, newStatus);
             loadOrders();
-        } catch (e) {
+        } catch {
             alert("Error actualizando estado");
         }
     };
@@ -48,7 +45,7 @@ export const OrdersTable = () => {
         try {
             await deleteOrder(id);
             loadOrders();
-        } catch (e) {
+        } catch {
             alert("Error eliminando pedido");
         }
     };
@@ -59,19 +56,17 @@ export const OrdersTable = () => {
 
     if (loading) return <div>Cargando pedidos...</div>;
 
+    const visible = orders.filter(
+        (o) => filterStatus === "all" || o.status === filterStatus
+    );
+
     return (
-        <div style={{ width: "100%" }}>
-            <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: spacing.sm }}>
+        <div className="w-full">
+            <div className="flex justify-end mb-2 gap-2">
                 <select
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value)}
-                    style={{
-                        padding: spacing.sm,
-                        borderRadius: borderRadius.sm,
-                        border: "1px solid " + colors.border,
-                        marginRight: spacing.sm,
-                        fontFamily: typography.fontFamily,
-                    }}
+                    className="p-2 rounded-sm border border-border font-sans"
                 >
                     <option value="all">Todos los estados</option>
                     <option value="pending">Pendiente</option>
@@ -80,98 +75,92 @@ export const OrdersTable = () => {
                 </select>
                 <button
                     onClick={loadOrders}
-                    style={{
-                        cursor: "pointer",
-                        background: colors.white,
-                        border: "1px solid " + colors.border,
-                        borderRadius: borderRadius.sm,
-                        padding: spacing.sm,
-                        fontSize: typography.sizes.sm,
-                        display: "flex",
-                        alignItems: "center",
-                        gap: spacing.xs
-                    }}
+                    className="cursor-pointer bg-white border border-border rounded-sm p-2 text-sm flex items-center gap-1"
                 >
                     🔄 Actualizar
                 </button>
             </div>
 
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <table className="w-full border-collapse">
                 <thead>
-                    <tr style={{ borderBottom: `2px solid ${colors.border}`, textAlign: "left" }}>
-                        <th style={{ padding: spacing.sm }}>Fecha</th>
-                        <th style={{ padding: spacing.sm }}>Cliente</th>
-                        <th style={{ padding: spacing.sm }}>Total</th>
-                        <th style={{ padding: spacing.sm }}>Estado</th>
-                        <th style={{ padding: spacing.sm }}>Acciones</th>
+                    <tr className="border-b-2 border-border text-left">
+                        <th className="p-2">Fecha</th>
+                        <th className="p-2">Cliente</th>
+                        <th className="p-2">Total</th>
+                        <th className="p-2">Estado</th>
+                        <th className="p-2">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {orders.filter(order => filterStatus === "all" || order.status === filterStatus).length === 0 ? (
+                    {visible.length === 0 ? (
                         <tr>
-                            <td colSpan={5} style={{ padding: spacing.lg, textAlign: "center", color: colors.textLight }}>
+                            <td colSpan={5} className="p-6 text-center text-textLight">
                                 No hay pedidos registrados aún.
                             </td>
                         </tr>
                     ) : (
-                        orders
-                            .filter(order => filterStatus === "all" || order.status === filterStatus)
-                            .map((order) => (
-                                <React.Fragment key={order.id}>
-                                    <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
-                                        <td style={{ padding: spacing.sm }}>{new Date(order.date).toLocaleDateString()}</td>
-                                        <td style={{ padding: spacing.sm }}>
-                                            <div>{order.customer_name}</div>
-                                            <div style={{ fontSize: typography.sizes.xs, color: colors.textLight }}>{order.customer_phone}</div>
-                                        </td>
-                                        <td style={{ padding: spacing.sm }}>${order.total.toFixed(2)}</td>
-                                        <td style={{ padding: spacing.sm }}>
-                                            <select
-                                                value={order.status}
-                                                onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                                                style={{
-                                                    padding: spacing.xs,
-                                                    borderRadius: borderRadius.md,
-                                                    backgroundColor: getStatusColor(order.status),
-                                                    border: "1px solid " + colors.border
-                                                }}
-                                            >
-                                                <option value="pending">Pendiente</option>
-                                                <option value="completed">Completado</option>
-                                                <option value="cancelled">Cancelado</option>
-                                            </select>
-                                        </td>
-                                        <td style={{ padding: spacing.sm }}>
-                                            <button onClick={() => toggleExpand(order.id)} style={{ marginRight: spacing.sm, cursor: "pointer", background: "none", border: "none" }}>
-                                                {expandedOrderId === order.id ? "🔽" : "▶️"}
-                                            </button>
-                                            <button onClick={() => handleDelete(order.id)} style={{ cursor: "pointer", background: "none", border: "none" }}>
-                                                🗑️
-                                            </button>
+                        visible.map((order) => (
+                            <React.Fragment key={order.id}>
+                                <tr className="border-b border-border">
+                                    <td className="p-2">{new Date(order.date).toLocaleDateString()}</td>
+                                    <td className="p-2">
+                                        <div>{order.customer_name}</div>
+                                        <div className="text-xs text-textLight">{order.customer_phone}</div>
+                                    </td>
+                                    <td className="p-2">${order.total.toFixed(2)}</td>
+                                    <td className="p-2">
+                                        <select
+                                            value={order.status}
+                                            onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                                            className="p-1 rounded border border-border"
+                                            style={{ backgroundColor: STATUS_BG[order.status] || "#fff" }}
+                                        >
+                                            <option value="pending">Pendiente</option>
+                                            <option value="completed">Completado</option>
+                                            <option value="cancelled">Cancelado</option>
+                                        </select>
+                                    </td>
+                                    <td className="p-2">
+                                        <button
+                                            onClick={() => toggleExpand(order.id)}
+                                            className="mr-2 cursor-pointer bg-transparent border-none"
+                                        >
+                                            {expandedOrderId === order.id ? "🔽" : "▶️"}
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(order.id)}
+                                            className="cursor-pointer bg-transparent border-none"
+                                        >
+                                            🗑️
+                                        </button>
+                                    </td>
+                                </tr>
+                                {expandedOrderId === order.id && (
+                                    <tr className="bg-background">
+                                        <td colSpan={5} className="p-4">
+                                            <div className="flex flex-col gap-2">
+                                                <strong>Detalles del Pedido:</strong>
+                                                <ul className="m-0 pl-6">
+                                                    {order.items.map((item: any, idx: number) => (
+                                                        <li key={idx}>
+                                                            {item.quantity}x {item.name}
+                                                            {item.customization_text && (
+                                                                <span className="text-textLight"> ({item.customization_text})</span>
+                                                            )}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                                {order.delivery_address && (
+                                                    <div><strong>Dirección:</strong> {order.delivery_address}</div>
+                                                )}
+                                                {order.notes && <div><strong>Notas:</strong> {order.notes}</div>}
+                                                <div><strong>Email:</strong> {order.customer_email}</div>
+                                            </div>
                                         </td>
                                     </tr>
-                                    {expandedOrderId === order.id && (
-                                        <tr style={{ backgroundColor: colors.background }}>
-                                            <td colSpan={5} style={{ padding: spacing.md }}>
-                                                <div style={{ display: "flex", flexDirection: "column", gap: spacing.sm }}>
-                                                    <strong>Detalles del Pedido:</strong>
-                                                    <ul style={{ margin: 0, paddingLeft: spacing.lg }}>
-                                                        {order.items.map((item: any, idx: number) => (
-                                                            <li key={idx}>
-                                                                {item.quantity}x {item.name}
-                                                                {item.customization_text && <span style={{ color: colors.textLight }}> ({item.customization_text})</span>}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                    {order.delivery_address && <div><strong>Dirección:</strong> {order.delivery_address}</div>}
-                                                    {order.notes && <div><strong>Notas:</strong> {order.notes}</div>}
-                                                    <div><strong>Email:</strong> {order.customer_email}</div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    )}
-                                </React.Fragment>
-                            ))
+                                )}
+                            </React.Fragment>
+                        ))
                     )}
                 </tbody>
             </table>

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { colors, spacing, borderRadius } from "@/theme";
 
 interface Product {
     id: number;
@@ -16,8 +15,10 @@ interface ProductModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSave: (product: Product) => void;
-    product?: Product | null; // If null, we are creating
+    product?: Product | null;
 }
+
+const inputClass = "w-full p-2 rounded-sm border border-border";
 
 export const ProductModal: React.FC<ProductModalProps> = ({
     isOpen,
@@ -38,9 +39,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({
         if (product) {
             setFormData(product);
         } else {
-            // Reset for new product
             setFormData({
-                id: Date.now(), // Temporary ID generation for new items
+                id: Date.now(),
                 name: "",
                 price: 0,
                 category: "Tabletas",
@@ -66,62 +66,39 @@ export const ProductModal: React.FC<ProductModalProps> = ({
     };
 
     return (
-        <div
-            style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: "rgba(0,0,0,0.5)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                zIndex: 1000,
-            }}
-        >
-            <div
-                style={{
-                    backgroundColor: colors.white,
-                    padding: spacing.xl,
-                    borderRadius: borderRadius.lg,
-                    width: "500px",
-                    maxHeight: "90vh",
-                    overflowY: "auto",
-                }}
-            >
-                <h2 style={{ color: colors.primary, marginBottom: spacing.lg }}>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[1000]">
+            <div className="bg-white p-8 rounded-xl w-[500px] max-h-[90vh] overflow-y-auto">
+                <h2 className="text-primary mb-6">
                     {product ? "Editar Producto" : "Nuevo Producto"}
                 </h2>
 
                 <form onSubmit={handleSubmit}>
-                    {/* ID (Read only for edits, mostly hidden or auto for new) */}
-                    <div style={{ marginBottom: spacing.md }}>
-                        <label style={{ display: "block", marginBottom: spacing.xs }}>ID</label>
+                    <div className="mb-4">
+                        <label className="block mb-1">ID</label>
                         <input
                             type="number"
                             name="id"
                             value={formData.id}
-                            disabled={!!product} // Disable ID editing for existing
+                            disabled={!!product}
                             onChange={handleChange}
-                            style={{ width: "100%", padding: spacing.sm, borderRadius: borderRadius.sm, border: `1px solid ${colors.border}` }}
+                            className={inputClass}
                         />
                     </div>
 
-                    <div style={{ marginBottom: spacing.md }}>
-                        <label style={{ display: "block", marginBottom: spacing.xs }}>Nombre</label>
+                    <div className="mb-4">
+                        <label className="block mb-1">Nombre</label>
                         <input
                             type="text"
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
                             required
-                            style={{ width: "100%", padding: spacing.sm, borderRadius: borderRadius.sm, border: `1px solid ${colors.border}` }}
+                            className={inputClass}
                         />
                     </div>
 
-                    <div style={{ marginBottom: spacing.md }}>
-                        <label style={{ display: "block", marginBottom: spacing.xs }}>Precio ($)</label>
+                    <div className="mb-4">
+                        <label className="block mb-1">Precio ($)</label>
                         <input
                             type="number"
                             name="price"
@@ -129,17 +106,17 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                             onChange={handleChange}
                             required
                             min="0"
-                            style={{ width: "100%", padding: spacing.sm, borderRadius: borderRadius.sm, border: `1px solid ${colors.border}` }}
+                            className={inputClass}
                         />
                     </div>
 
-                    <div style={{ marginBottom: spacing.md }}>
-                        <label style={{ display: "block", marginBottom: spacing.xs }}>Categoría</label>
+                    <div className="mb-4">
+                        <label className="block mb-1">Categoría</label>
                         <select
                             name="category"
                             value={formData.category}
                             onChange={handleChange}
-                            style={{ width: "100%", padding: spacing.sm, borderRadius: borderRadius.sm, border: `1px solid ${colors.border}` }}
+                            className={inputClass}
                         >
                             <option value="Tabletas">Tabletas</option>
                             <option value="Tabletas Chicas">Tabletas Chicas</option>
@@ -150,53 +127,39 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                         </select>
                     </div>
 
-                    <div style={{ marginBottom: spacing.md }}>
-                        <label style={{ display: "block", marginBottom: spacing.xs }}>Imagen URL</label>
+                    <div className="mb-4">
+                        <label className="block mb-1">Imagen URL</label>
                         <input
                             type="text"
                             name="image_url"
                             value={formData.image_url || ""}
                             onChange={handleChange}
                             placeholder="/images/products/..."
-                            style={{ width: "100%", padding: spacing.sm, borderRadius: borderRadius.sm, border: `1px solid ${colors.border}` }}
+                            className={inputClass}
                         />
                     </div>
 
-                    <div style={{ marginBottom: spacing.md }}>
-                        <label style={{ display: "block", marginBottom: spacing.xs }}>Descripción</label>
+                    <div className="mb-4">
+                        <label className="block mb-1">Descripción</label>
                         <textarea
                             name="description"
                             value={formData.description || ""}
                             onChange={handleChange}
-                            style={{ width: "100%", padding: spacing.sm, borderRadius: borderRadius.sm, border: `1px solid ${colors.border}`, minHeight: '80px' }}
+                            className={`${inputClass} min-h-[80px]`}
                         />
                     </div>
 
-                    <div style={{ display: "flex", justifyContent: "flex-end", gap: spacing.md, marginTop: spacing.xl }}>
+                    <div className="flex justify-end gap-4 mt-8">
                         <button
                             type="button"
                             onClick={onClose}
-                            style={{
-                                padding: "8px 16px",
-                                backgroundColor: colors.textLight,
-                                color: colors.white,
-                                border: "none",
-                                borderRadius: borderRadius.md,
-                                cursor: "pointer",
-                            }}
+                            className="px-4 py-2 bg-textLight text-white border-none rounded cursor-pointer"
                         >
                             Cancelar
                         </button>
                         <button
                             type="submit"
-                            style={{
-                                padding: "8px 16px",
-                                backgroundColor: colors.primary,
-                                color: colors.white,
-                                border: "none",
-                                borderRadius: borderRadius.md,
-                                cursor: "pointer",
-                            }}
+                            className="px-4 py-2 bg-primary text-white border-none rounded cursor-pointer"
                         >
                             Guardar
                         </button>

@@ -1,21 +1,34 @@
-'use client';
+"use client";
+
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { checkAuth, logout, fetchProducts, deleteProduct, updateProduct, createProduct } from '@/services/api';
-import { colors, spacing, typography, borderRadius } from '@/theme';
+import {
+    checkAuth,
+    logout,
+    fetchProducts,
+    deleteProduct,
+    updateProduct,
+    createProduct,
+} from '@/services/api';
 import { ProductModal } from './ProductModal';
 import { OrdersTable } from './OrdersTable';
 import { StatsView } from './StatsView';
 
+type Tab = 'products' | 'orders' | 'stats';
+
+const tabClass = (active: boolean) =>
+    `p-4 bg-transparent border-none cursor-pointer font-bold ${
+        active ? 'text-primary border-b-2 border-primary' : 'text-textLight'
+    }`;
+
 export default function AdminDashboard() {
     const router = useRouter();
-    const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'stats'>('products');
+    const [activeTab, setActiveTab] = useState<Tab>('products');
     const [products, setProducts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentProduct, setCurrentProduct] = useState<any>(null); // null = new, object = edit
+    const [currentProduct, setCurrentProduct] = useState<any>(null);
 
-    // Load initial data
     useEffect(() => {
         if (!checkAuth()) {
             router.push('/admin/login');
@@ -40,8 +53,8 @@ export default function AdminDashboard() {
         if (!confirm('¿Estás seguro de eliminar este producto?')) return;
         try {
             await deleteProduct(id);
-            loadProducts(); // Refresh
-        } catch (e) {
+            loadProducts();
+        } catch {
             alert('Error eliminando');
         }
     };
@@ -59,10 +72,8 @@ export default function AdminDashboard() {
     const handleSave = async (productData: any) => {
         try {
             if (currentProduct) {
-                // Update
                 await updateProduct(productData.id, productData);
             } else {
-                // Create
                 await createProduct(productData);
             }
             setIsModalOpen(false);
@@ -75,8 +86,7 @@ export default function AdminDashboard() {
 
     const toggleVisibility = async (product: any) => {
         try {
-            const updatedProduct = { ...product, is_visible: !product.is_visible };
-            await updateProduct(product.id, updatedProduct);
+            await updateProduct(product.id, { ...product, is_visible: !product.is_visible });
             loadProducts();
         } catch (e) {
             alert('Error actualizando visibilidad');
@@ -84,134 +94,90 @@ export default function AdminDashboard() {
         }
     };
 
-    if (loading) return <div style={{ padding: spacing.xl }}>Cargando...</div>;
+    if (loading) return <div className="p-8">Cargando...</div>;
 
     return (
-        <div style={{
-            minHeight: '100vh',
-            backgroundColor: colors.background,
-            fontFamily: typography.fontFamily,
-            padding: spacing.xl
-        }}>
-            <div style={{
-                maxWidth: '1000px',
-                margin: '0 auto',
-                backgroundColor: colors.white,
-                padding: spacing.xl,
-                borderRadius: borderRadius.lg,
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-            }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.xl }}>
-                    <h1 style={{ fontSize: typography.sizes.xl, color: colors.primary, margin: 0 }}>Panel de Administración</h1>
-
-                    <button onClick={logout} style={{
-                        padding: '8px 16px',
-                        border: `1px solid ${colors.textLight}`,
-                        borderRadius: borderRadius.md,
-                        backgroundColor: 'transparent',
-                        cursor: 'pointer'
-                    }}>Cerrar Sesión</button>
+        <div className="min-h-screen bg-background font-sans p-8">
+            <div className="max-w-[1000px] mx-auto bg-white p-8 rounded-xl shadow-sm">
+                <div className="flex justify-between items-center mb-8">
+                    <h1 className="text-xl text-primary m-0">Panel de Administración</h1>
+                    <button
+                        onClick={logout}
+                        className="px-4 py-2 border border-textLight rounded bg-transparent cursor-pointer"
+                    >
+                        Cerrar Sesión
+                    </button>
                 </div>
 
-                {/* Tabs */}
-                <div style={{ display: 'flex', gap: spacing.md, marginBottom: spacing.lg, borderBottom: `1px solid ${colors.border}` }}>
-                    <button
-                        onClick={() => setActiveTab('products')}
-                        style={{
-                            padding: spacing.md,
-                            background: 'none',
-                            border: 'none',
-                            borderBottom: activeTab === 'products' ? `2px solid ${colors.primary}` : 'none',
-                            color: activeTab === 'products' ? colors.primary : colors.textLight,
-                            fontWeight: 'bold',
-                            cursor: 'pointer'
-                        }}
-                    >
+                <div className="flex gap-4 mb-6 border-b border-border">
+                    <button onClick={() => setActiveTab('products')} className={tabClass(activeTab === 'products')}>
                         📦 Productos
                     </button>
-                    <button
-                        onClick={() => setActiveTab('orders')}
-                        style={{
-                            padding: spacing.md,
-                            background: 'none',
-                            border: 'none',
-                            borderBottom: activeTab === 'orders' ? `2px solid ${colors.primary}` : 'none',
-                            color: activeTab === 'orders' ? colors.primary : colors.textLight,
-                            fontWeight: 'bold',
-                            cursor: 'pointer'
-                        }}
-                    >
+                    <button onClick={() => setActiveTab('orders')} className={tabClass(activeTab === 'orders')}>
                         📋 Pedidos
                     </button>
-                    <button
-                        onClick={() => setActiveTab('stats')}
-                        style={{
-                            padding: spacing.md,
-                            background: 'none',
-                            border: 'none',
-                            borderBottom: activeTab === 'stats' ? `2px solid ${colors.primary}` : 'none',
-                            color: activeTab === 'stats' ? colors.primary : colors.textLight,
-                            fontWeight: 'bold',
-                            cursor: 'pointer'
-                        }}
-                    >
+                    <button onClick={() => setActiveTab('stats')} className={tabClass(activeTab === 'stats')}>
                         📊 Estadísticas
                     </button>
                 </div>
 
                 {activeTab === 'products' ? (
                     <>
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: spacing.md }}>
-                            <button onClick={handleCreateClick} style={{
-                                padding: '8px 16px',
-                                backgroundColor: colors.primary,
-                                color: colors.white,
-                                border: 'none',
-                                borderRadius: borderRadius.md,
-                                cursor: 'pointer',
-                                fontWeight: 'bold'
-                            }}>+ Nuevo Producto</button>
+                        <div className="flex justify-end mb-4">
+                            <button
+                                onClick={handleCreateClick}
+                                className="px-4 py-2 bg-primary text-white border-none rounded cursor-pointer font-bold"
+                            >
+                                + Nuevo Producto
+                            </button>
                         </div>
 
-                        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                        <table className="w-full border-collapse">
                             <thead>
-                                <tr style={{ borderBottom: `2px solid ${colors.border}`, textAlign: 'left' }}>
-                                    <th style={{ padding: spacing.sm }}>ID</th>
-                                    <th style={{ padding: spacing.sm }}>Imagen</th>
-                                    <th style={{ padding: spacing.sm }}>Nombre</th>
-                                    <th style={{ padding: spacing.sm }}>Precio</th>
-                                    <th style={{ padding: spacing.sm }}>Visible</th>
-                                    <th style={{ padding: spacing.sm }}>Acciones</th>
+                                <tr className="border-b-2 border-border text-left">
+                                    <th className="p-2">ID</th>
+                                    <th className="p-2">Imagen</th>
+                                    <th className="p-2">Nombre</th>
+                                    <th className="p-2">Precio</th>
+                                    <th className="p-2">Visible</th>
+                                    <th className="p-2">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {products.map(p => (
-                                    <tr key={p.id} style={{ borderBottom: `1px solid ${colors.border}` }}>
-                                        <td style={{ padding: spacing.sm }}>{p.id}</td>
-                                        <td style={{ padding: spacing.sm }}>
-                                            {p.image_url && <img src={p.image_url} alt="" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} />}
+                                {products.map((p) => (
+                                    <tr key={p.id} className="border-b border-border">
+                                        <td className="p-2">{p.id}</td>
+                                        <td className="p-2">
+                                            {p.image_url && (
+                                                <img
+                                                    src={p.image_url}
+                                                    alt=""
+                                                    className="w-10 h-10 object-cover rounded-sm"
+                                                />
+                                            )}
                                         </td>
-                                        <td style={{ padding: spacing.sm, fontWeight: 'bold' }}>{p.name}</td>
-                                        <td style={{ padding: spacing.sm }}>${p.price.toLocaleString('es-AR')}</td>
-                                        <td style={{ padding: spacing.sm }}>
+                                        <td className="p-2 font-bold">{p.name}</td>
+                                        <td className="p-2">${p.price.toLocaleString('es-AR')}</td>
+                                        <td className="p-2">
                                             <button
                                                 onClick={() => toggleVisibility(p)}
-                                                style={{
-                                                    background: 'none',
-                                                    border: 'none',
-                                                    cursor: 'pointer',
-                                                    fontSize: '1.2rem'
-                                                }}
                                                 title={p.is_visible !== false ? "Ocultar" : "Mostrar"}
+                                                className="bg-transparent border-none cursor-pointer text-[1.2rem]"
                                             >
                                                 {p.is_visible !== false ? '👁️' : '🔒'}
                                             </button>
                                         </td>
-                                        <td style={{ padding: spacing.sm }}>
-                                            <button onClick={() => handleEditClick(p)} style={{ marginRight: spacing.sm, cursor: 'pointer', color: 'blue', background: 'none', border: 'none' }}>
+                                        <td className="p-2">
+                                            <button
+                                                onClick={() => handleEditClick(p)}
+                                                className="mr-2 cursor-pointer text-blue-600 bg-transparent border-none"
+                                            >
                                                 ✏️ Editar
                                             </button>
-                                            <button onClick={() => handleDelete(p.id)} style={{ cursor: 'pointer', color: 'red', background: 'none', border: 'none' }}>
+                                            <button
+                                                onClick={() => handleDelete(p.id)}
+                                                className="cursor-pointer text-red-600 bg-transparent border-none"
+                                            >
                                                 🗑️ Borrar
                                             </button>
                                         </td>
