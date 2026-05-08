@@ -10,12 +10,23 @@ export default function AdminLogin() {
     const [error, setError] = useState('');
     const router = useRouter();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [submitting, setSubmitting] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (login(password)) {
-            router.push('/admin');
-        } else {
-            setError('Contraseña incorrecta');
+        setSubmitting(true);
+        setError('');
+        try {
+            const ok = await login(password);
+            if (ok) {
+                router.push('/admin');
+            } else {
+                setError('Contraseña incorrecta');
+            }
+        } catch {
+            setError('No se pudo conectar al servidor');
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -72,18 +83,19 @@ export default function AdminLogin() {
                     />
                 </div>
 
-                <button type="submit" style={{
+                <button type="submit" disabled={submitting} style={{
                     width: '100%',
                     padding: spacing.md,
                     backgroundColor: colors.primary,
                     color: colors.white,
                     border: 'none',
                     borderRadius: borderRadius.md,
-                    cursor: 'pointer',
+                    cursor: submitting ? 'wait' : 'pointer',
                     fontSize: typography.sizes.base,
-                    fontWeight: 'bold'
+                    fontWeight: 'bold',
+                    opacity: submitting ? 0.6 : 1
                 }}>
-                    Ingresar
+                    {submitting ? 'Ingresando…' : 'Ingresar'}
                 </button>
             </form>
         </div>

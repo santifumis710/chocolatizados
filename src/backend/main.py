@@ -81,6 +81,14 @@ except Exception as e:
     traceback.print_exc()
     print(f"⚠️ Orders Routes disabled: {type(e).__name__}")
 
+try:
+    from app.routes import auth
+    app.include_router(auth.router)
+except Exception as e:
+    import traceback
+    traceback.print_exc()
+    print(f"⚠️ Auth Routes disabled: {type(e).__name__}")
+
 
 if __name__ == "__main__":
     import uvicorn

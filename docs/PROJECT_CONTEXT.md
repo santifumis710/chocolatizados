@@ -175,8 +175,8 @@ total           Float
 |---|---|---|
 | `POSTGRES_URL` / `DATABASE_URL` / `POSTGRES_PRISMA_URL` | Backend | PostgreSQL connection string |
 | `WHATSAPP_BUSINESS_PHONE` | Backend | Default `5493426158358` |
+| `ADMIN_PASSWORD` | Backend | Admin panel password — backend validates and issues HMAC tokens. Rotating it invalidates every outstanding session. |
 | `NEXT_PUBLIC_API_URL` | Frontend | Backend base URL (empty = relative, works on Vercel) |
-| `NEXT_PUBLIC_ADMIN_PASSWORD` | Frontend | Admin panel password (default `admin123`) |
 
 ---
 
@@ -206,12 +206,6 @@ colors.border    = "#DDD9CF"
 ---
 
 ## Known Issues & Problems
-
-### 🔴 Critical
-
-1. **Admin auth is insecure**: Password stored in `localStorage`, compared against `NEXT_PUBLIC_ADMIN_PASSWORD` (frontend env var visible in bundle). Anyone with devtools can find it. Should be replaced with server-side session auth.
-
-2. **Debug endpoints in production**: `GET /api/debug_env` and `GET /seed` are exposed. These should be removed or protected.
 
 ### 🟡 Architecture / Design Debt
 

@@ -3,6 +3,7 @@ import os
 from typing import List
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
+from app.auth import require_admin
 from app.models.schemas import Product
 from app.db import get_db, ProductModel
 
@@ -18,7 +19,7 @@ async def get_products(db: Session = Depends(get_db)):
     products = db.query(ProductModel).order_by(ProductModel.id).all()
     return products
 
-@router.post("/", response_model=Product)
+@router.post("/", response_model=Product, dependencies=[Depends(require_admin)])
 async def create_product(product: Product, db: Session = Depends(get_db)):
     """Create a new product in DB"""
     # Check if ID exists
@@ -46,7 +47,7 @@ async def create_product(product: Product, db: Session = Depends(get_db)):
     db.refresh(new_product)
     return new_product
 
-@router.put("/{product_id}", response_model=Product)
+@router.put("/{product_id}", response_model=Product, dependencies=[Depends(require_admin)])
 async def update_product(product_id: int, product_update: Product, db: Session = Depends(get_db)):
     """Update a product in DB"""
     product = db.query(ProductModel).filter(ProductModel.id == product_id).first()
@@ -68,7 +69,7 @@ async def update_product(product_id: int, product_update: Product, db: Session =
     db.refresh(product)
     return product
 
-@router.delete("/{product_id}")
+@router.delete("/{product_id}", dependencies=[Depends(require_admin)])
 async def delete_product(product_id: int, db: Session = Depends(get_db)):
     """Delete a product from DB"""
     product = db.query(ProductModel).filter(ProductModel.id == product_id).first()

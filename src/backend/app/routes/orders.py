@@ -4,6 +4,7 @@ from typing import List, Optional
 from fastapi import APIRouter, HTTPException, Body, Depends
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
+from app.auth import require_admin
 from app.db import get_db, OrderModel
 
 class CartItem(BaseModel):
@@ -37,8 +38,8 @@ router = APIRouter(
     tags=["orders"]
 )
 
-@router.get("", response_model=List[Order])
-@router.get("/", response_model=List[Order])
+@router.get("", response_model=List[Order], dependencies=[Depends(require_admin)])
+@router.get("/", response_model=List[Order], dependencies=[Depends(require_admin)])
 async def get_orders(db: Session = Depends(get_db)):
     """Get all orders"""
     return db.query(OrderModel).all()
@@ -59,7 +60,7 @@ async def create_order(order_in: OrderCreate, db: Session = Depends(get_db)):
     db.refresh(new_order)
     return new_order
 
-@router.put("/{order_id}/status")
+@router.put("/{order_id}/status", dependencies=[Depends(require_admin)])
 async def update_order_status(order_id: str, status: str = Body(..., embed=True), db: Session = Depends(get_db)):
     """Update order status"""
     order = db.query(OrderModel).filter(OrderModel.id == order_id).first()
@@ -71,7 +72,7 @@ async def update_order_status(order_id: str, status: str = Body(..., embed=True)
     db.refresh(order)
     return order
 
-@router.delete("/{order_id}")
+@router.delete("/{order_id}", dependencies=[Depends(require_admin)])
 async def delete_order(order_id: str, db: Session = Depends(get_db)):
     """Delete an order"""
     order = db.query(OrderModel).filter(OrderModel.id == order_id).first()
