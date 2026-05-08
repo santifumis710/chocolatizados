@@ -27,7 +27,7 @@ interface Product {
   is_visible?: boolean;
 }
 
-const WHATSAPP_PHONE = "5493426158358";
+const WHATSAPP_PHONE = process.env.NEXT_PUBLIC_WHATSAPP_BUSINESS_PHONE ?? "5493425334765";
 
 const buildWhatsAppMessage = (data: any, total: number) => {
   const itemsList = data.items
