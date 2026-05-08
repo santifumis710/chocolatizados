@@ -106,13 +106,6 @@ async def health_check():
 
 
 # Import routes
-# Import routes
-try:
-    from app.routes import whatsapp
-    app.include_router(whatsapp.router)
-except Exception as e:
-    print(f"⚠️ Whatsapp Routes disabled: {type(e).__name__}")
-
 try:
     from app.routes import products
     app.include_router(products.router)
