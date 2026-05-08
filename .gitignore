@@ -13,5 +13,5 @@ __pycache__
 .tmp/
 .venv/
 last_openrouter_response.json
-*.pdf
-catalogo/
+*.stackdump
+tsconfig.tsbuildinfo
