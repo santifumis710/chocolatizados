@@ -49,7 +49,7 @@ export const Header = ({ itemCount, onCartClick }: HeaderProps) => (
               <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
             </svg>
           </SocialIcon>
-          <SocialIcon href={`https://api.whatsapp.com/send?phone=${process.env.NEXT_PUBLIC_WHATSAPP_BUSINESS_PHONE ?? "5493424062442"}&text=Hola%20Marie,%20quiero%20chocolates!`}>
+          <SocialIcon href="https://api.whatsapp.com/send?phone=5493424062442&text=Hola%20Marie,%20quiero%20chocolates!">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
