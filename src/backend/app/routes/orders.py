@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException, Body, Depends
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from app.auth import require_admin
-from app.db import get_db, OrderModel
+from app.db import get_db, OrderModel, DiscountCodeModel
 
 class CartItem(BaseModel):
     product_id: int
@@ -58,6 +58,14 @@ async def create_order(order_in: OrderCreate, db: Session = Depends(get_db)):
     )
     
     db.add(new_order)
+
+    if order_in.discount_code:
+        dc = db.query(DiscountCodeModel).filter(
+            DiscountCodeModel.code == order_in.discount_code
+        ).first()
+        if dc:
+            dc.uses_count += 1
+
     db.commit()
     db.refresh(new_order)
     return new_order
