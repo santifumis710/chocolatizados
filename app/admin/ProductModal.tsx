@@ -63,7 +63,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
 
     useEffect(() => {
         if (product) {
-            setFormData({ min_quantity: 1, ...product });
+            setFormData({ ...product, min_quantity: product.min_quantity ?? 1 });
         } else {
             setFormData({
                 id: Date.now(),
