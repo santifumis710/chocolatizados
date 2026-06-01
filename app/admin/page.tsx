@@ -13,8 +13,9 @@ import {
 import { ProductModal } from './ProductModal';
 import { OrdersTable } from './OrdersTable';
 import { StatsView } from './StatsView';
+import { DiscountCodesTab } from './DiscountCodesTab';
 
-type Tab = 'products' | 'orders' | 'stats';
+type Tab = 'products' | 'orders' | 'stats' | 'discounts';
 
 const tabClass = (active: boolean) =>
     `p-4 bg-transparent border-none cursor-pointer font-bold ${
@@ -119,6 +120,9 @@ export default function AdminDashboard() {
                     <button onClick={() => setActiveTab('stats')} className={tabClass(activeTab === 'stats')}>
                         📊 Estadísticas
                     </button>
+                    <button onClick={() => setActiveTab('discounts')} className={tabClass(activeTab === 'discounts')}>
+                        🏷️ Descuentos
+                    </button>
                 </div>
 
                 {activeTab === 'products' ? (
@@ -195,8 +199,10 @@ export default function AdminDashboard() {
                     </>
                 ) : activeTab === 'orders' ? (
                     <OrdersTable />
-                ) : (
+                ) : activeTab === 'stats' ? (
                     <StatsView />
+                ) : (
+                    <DiscountCodesTab />
                 )}
             </div>
         </div>

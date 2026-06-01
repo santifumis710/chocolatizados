@@ -22,8 +22,10 @@ class OrderCreate(BaseModel):
     customer_email: Optional[str] = None
     delivery_address: Optional[str] = None
     notes: Optional[str] = None
-    items: List[dict] 
+    items: List[dict]
     total: float
+    discount_code: Optional[str] = None
+    discount_amount: Optional[float] = None
 
 class Order(OrderCreate):
     id: str

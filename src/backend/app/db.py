@@ -1,5 +1,5 @@
 import os
-from sqlalchemy import create_engine, Column, String, Float, DateTime, JSON, Text, Integer, Boolean
+from sqlalchemy import create_engine, Column, String, Float, DateTime, JSON, Text, Integer, Boolean, UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -29,8 +29,10 @@ class OrderModel(Base):
     customer_email = Column(String, nullable=True)
     delivery_address = Column(Text, nullable=True)
     notes = Column(Text, nullable=True)
-    items = Column(JSON) # Store items as JSON
+    items = Column(JSON)
     total = Column(Float)
+    discount_code = Column(String, nullable=True)
+    discount_amount = Column(Float, nullable=True)
 
 class ProductModel(Base):
     __tablename__ = "products"
@@ -51,6 +53,18 @@ class ProductModel(Base):
     min_quantity = Column(Integer, default=1)
     options = Column(String, nullable=True) # Stored as string "Option1|100, Option2|200"
     image_position = Column(String, nullable=True)
+
+class DiscountCodeModel(Base):
+    __tablename__ = "discount_codes"
+
+    id = Column(String, primary_key=True, index=True)
+    code = Column(String, unique=True, index=True)
+    discount_type = Column(String)  # "percentage" or "fixed"
+    discount_value = Column(Float)
+    max_uses = Column(Integer, nullable=True)
+    uses_count = Column(Integer, default=0)
+    expires_at = Column(DateTime, nullable=True)
+    is_active = Column(Boolean, default=True)
 
 def init_db():
     if engine:

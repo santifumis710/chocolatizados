@@ -114,3 +114,63 @@ export const deleteOrder = async (id: string) => {
     if (!res.ok) throw new Error('Failed to delete order');
     return res.json();
 };
+
+// Discount Codes API
+
+export const validateDiscountCode = async (code: string, orderTotal: number) => {
+    const res = await fetch(`${API_URL}/api/discount-codes/validate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, order_total: orderTotal }),
+    });
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.detail || 'Código inválido');
+    }
+    return res.json() as Promise<{
+        valid: boolean;
+        code: string;
+        discount_type: string;
+        discount_value: number;
+        discount_amount: number;
+        final_total: number;
+    }>;
+};
+
+export const fetchDiscountCodes = async () => {
+    const res = await adminFetch(`${API_URL}/api/discount-codes/`);
+    if (!res.ok) throw new Error('Failed to fetch discount codes');
+    return res.json();
+};
+
+export const createDiscountCode = async (data: any) => {
+    const res = await adminFetch(`${API_URL}/api/discount-codes/`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.detail || 'Error creando código');
+    }
+    return res.json();
+};
+
+export const updateDiscountCode = async (id: string, data: any) => {
+    const res = await adminFetch(`${API_URL}/api/discount-codes/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.detail || 'Error actualizando código');
+    }
+    return res.json();
+};
+
+export const deleteDiscountCode = async (id: string) => {
+    const res = await adminFetch(`${API_URL}/api/discount-codes/${id}`, {
+        method: 'DELETE',
+    });
+    if (!res.ok) throw new Error('Error eliminando código');
+    return res.json();
+};

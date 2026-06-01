@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { CartItem } from "@/hooks/useCart";
+import { validateDiscountCode } from "@/services/api";
 
 interface CheckoutData {
   customer_name: string;
@@ -9,12 +10,20 @@ interface CheckoutData {
   customer_email: string;
 }
 
+export interface DiscountInfo {
+  code: string;
+  discount_type: string;
+  discount_value: number;
+  discount_amount: number;
+  final_total: number;
+}
+
 interface CheckoutModalProps {
   isOpen: boolean;
   items: CartItem[];
   total: number;
   onClose: () => void;
-  onSubmit: (data: CheckoutData & { items: CartItem[] }) => void;
+  onSubmit: (data: CheckoutData & { items: CartItem[]; discount?: DiscountInfo }) => void;
   isLoading?: boolean;
 }
 
@@ -37,7 +46,35 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     customer_email: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [step, setStep] = useState<1 | 2>(1);
+  const [step, setStep] = useState<0 | 1 | 2>(0);
+
+  const [discountCode, setDiscountCode] = useState("");
+  const [discountInfo, setDiscountInfo] = useState<DiscountInfo | null>(null);
+  const [discountError, setDiscountError] = useState("");
+  const [discountLoading, setDiscountLoading] = useState(false);
+
+  const effectiveTotal = discountInfo ? discountInfo.final_total : total;
+
+  const handleApplyDiscount = async () => {
+    if (!discountCode.trim()) return;
+    setDiscountError("");
+    setDiscountInfo(null);
+    setDiscountLoading(true);
+    try {
+      const result = await validateDiscountCode(discountCode.trim(), total);
+      setDiscountInfo(result);
+    } catch (err: any) {
+      setDiscountError(err.message || "Código inválido");
+    } finally {
+      setDiscountLoading(false);
+    }
+  };
+
+  const handleRemoveDiscount = () => {
+    setDiscountInfo(null);
+    setDiscountCode("");
+    setDiscountError("");
+  };
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -66,7 +103,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       if (validateForm()) setStep(2);
       return;
     }
-    onSubmit({ ...formData, items });
+    onSubmit({ ...formData, items, discount: discountInfo ?? undefined });
   };
 
   const handleInputChange = (
@@ -79,37 +116,168 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   if (!isOpen) return null;
 
+  const stepTitle = step === 0 ? "¿Tenés un código de descuento?" : step === 1 ? "Confirma tu pedido" : "¡Todo Listo!";
+
   return (
     <>
       <div onClick={onClose} className="fixed inset-0 bg-black/50 z-[1999]" />
 
       <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-lg z-[2000] max-w-[500px] w-[90%] max-h-[90vh] overflow-y-auto">
         <div className="p-6 border-b border-border flex justify-between items-center">
-          <h2 className="m-0 text-xl text-primary">
-            {step === 1 ? "Confirma tu pedido" : "¡Todo Listo!"}
-          </h2>
+          <h2 className="m-0 text-xl text-primary">{stepTitle}</h2>
           <button onClick={onClose} className="bg-transparent border-none text-2xl cursor-pointer text-text">
             ✕
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6">
-          {step === 1 ? (
+          {step === 0 ? (
             <>
+              {/* Order summary */}
               <div className="mb-6 p-4 bg-background rounded">
-                <h3 className="m-0 mb-2 text-base text-primary">📦 Tu pedido ({items.length} items)</h3>
+                <h3 className="m-0 mb-2 text-base text-primary">📦 Tu pedido ({items.length} {items.length === 1 ? "item" : "items"})</h3>
                 {items.map((item) => (
                   <div
                     key={`${item.product_id}-${item.customization_text || "default"}`}
                     className="flex justify-between mb-1 text-sm"
                   >
                     <span>{item.name} x{item.quantity}</span>
-                    <span className="font-bold">${(item.price * item.quantity).toFixed(2)}</span>
+                    <span className="font-bold">${(item.price * item.quantity).toLocaleString("es-AR", { minimumFractionDigits: 2 })}</span>
                   </div>
                 ))}
-                <div className="mt-2 pt-2 border-t border-border flex justify-between font-bold text-base">
-                  <span>Total:</span>
-                  <span className="text-primary">${total.toFixed(2)}</span>
+                <div className="mt-2 pt-2 border-t border-border">
+                  {discountInfo ? (
+                    <>
+                      <div className="flex justify-between text-sm text-gray-500 mb-1">
+                        <span>Subtotal:</span>
+                        <span>${total.toLocaleString("es-AR", { minimumFractionDigits: 2 })}</span>
+                      </div>
+                      <div className="flex justify-between text-sm text-green-600 mb-1">
+                        <span>
+                          🏷️ Descuento ({discountInfo.code}
+                          {discountInfo.discount_type === "percentage"
+                            ? ` −${discountInfo.discount_value}%`
+                            : ""}):
+                        </span>
+                        <span>−${discountInfo.discount_amount.toLocaleString("es-AR", { minimumFractionDigits: 2 })}</span>
+                      </div>
+                      <div className="flex justify-between font-bold text-base mt-1">
+                        <span>Total:</span>
+                        <span className="text-primary">${discountInfo.final_total.toLocaleString("es-AR", { minimumFractionDigits: 2 })}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex justify-between font-bold text-base">
+                      <span>Total:</span>
+                      <span className="text-primary">${total.toLocaleString("es-AR", { minimumFractionDigits: 2 })}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Discount code input */}
+              {discountInfo ? (
+                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded flex items-center justify-between">
+                  <span className="text-green-700 text-sm font-bold">
+                    ✅ Código <strong>{discountInfo.code}</strong> aplicado
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleRemoveDiscount}
+                    className="text-gray-400 text-sm bg-transparent border-none cursor-pointer underline"
+                  >
+                    Quitar
+                  </button>
+                </div>
+              ) : (
+                <div className="mb-6">
+                  <label className="block mb-2 text-sm font-bold text-text">🏷️ Código de descuento</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={discountCode}
+                      onChange={(e) => {
+                        setDiscountCode(e.target.value.toUpperCase());
+                        setDiscountError("");
+                      }}
+                      onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleApplyDiscount())}
+                      placeholder="Ej: PROMO15"
+                      className="flex-1 p-4 rounded text-base font-sans box-border border border-border"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleApplyDiscount}
+                      disabled={discountLoading || !discountCode.trim()}
+                      className="px-4 py-2 bg-primary text-white border-none rounded text-sm font-bold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {discountLoading ? "..." : "Aplicar"}
+                    </button>
+                  </div>
+                  {discountError && (
+                    <p className="text-error text-sm mt-1">{discountError}</p>
+                  )}
+                </div>
+              )}
+
+              <div className="flex gap-4">
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  className="flex-1 p-4 bg-primary text-white border-none rounded text-base font-bold cursor-pointer"
+                >
+                  Continuar
+                </button>
+                {!discountInfo && (
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="flex-1 p-4 bg-white text-primary border border-primary rounded text-base cursor-pointer"
+                  >
+                    Cancelar
+                  </button>
+                )}
+              </div>
+            </>
+          ) : step === 1 ? (
+            <>
+              <div className="mb-6 p-4 bg-background rounded">
+                <h3 className="m-0 mb-2 text-base text-primary">📦 Tu pedido ({items.length} {items.length === 1 ? "item" : "items"})</h3>
+                {items.map((item) => (
+                  <div
+                    key={`${item.product_id}-${item.customization_text || "default"}`}
+                    className="flex justify-between mb-1 text-sm"
+                  >
+                    <span>{item.name} x{item.quantity}</span>
+                    <span className="font-bold">${(item.price * item.quantity).toLocaleString("es-AR", { minimumFractionDigits: 2 })}</span>
+                  </div>
+                ))}
+                <div className="mt-2 pt-2 border-t border-border">
+                  {discountInfo ? (
+                    <>
+                      <div className="flex justify-between text-sm text-gray-500 mb-1">
+                        <span>Subtotal:</span>
+                        <span>${total.toLocaleString("es-AR", { minimumFractionDigits: 2 })}</span>
+                      </div>
+                      <div className="flex justify-between text-sm text-green-600 mb-1">
+                        <span>
+                          🏷️ Descuento ({discountInfo.code}
+                          {discountInfo.discount_type === "percentage"
+                            ? ` −${discountInfo.discount_value}%`
+                            : ""}):
+                        </span>
+                        <span>−${discountInfo.discount_amount.toLocaleString("es-AR", { minimumFractionDigits: 2 })}</span>
+                      </div>
+                      <div className="flex justify-between font-bold text-base mt-1">
+                        <span>Total:</span>
+                        <span className="text-primary">${discountInfo.final_total.toLocaleString("es-AR", { minimumFractionDigits: 2 })}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex justify-between font-bold text-base">
+                      <span>Total:</span>
+                      <span className="text-primary">${total.toLocaleString("es-AR", { minimumFractionDigits: 2 })}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -167,10 +335,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 </button>
                 <button
                   type="button"
-                  onClick={onClose}
-                  className="flex-1 p-4 bg-white text-primary border border-primary rounded text-base cursor-pointer"
+                  onClick={() => setStep(0)}
+                  className="p-4 bg-white text-text border border-border rounded text-base cursor-pointer"
                 >
-                  Cancelar
+                  Atrás
                 </button>
               </div>
             </>

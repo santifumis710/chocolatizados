@@ -29,7 +29,7 @@ interface Product {
 
 const WHATSAPP_PHONE = "5493424062442";
 
-const buildWhatsAppMessage = (data: any, total: number) => {
+const buildWhatsAppMessage = (data: any, originalTotal: number) => {
   const itemsList = data.items
     .map((item: any) =>
       `- ${item.quantity}x ${item.name}${item.customization_text ? ` ${item.customization_text}` : ""}`
@@ -40,12 +40,19 @@ const buildWhatsAppMessage = (data: any, total: number) => {
   const clipboard = String.fromCodePoint(0x1f4cb);
   const moneyBag = String.fromCodePoint(0x1f4b0);
   const bust = String.fromCodePoint(0x1f464);
+  const tag = String.fromCodePoint(0x1f3f7);
+
+  const discount = data.discount;
+  const totalLine = discount
+    ? `${tag} Descuento ${discount.code}: -$${discount.discount_amount.toLocaleString("es-AR", { minimumFractionDigits: 2 })}\n` +
+      `${moneyBag} Total: $${discount.final_total.toLocaleString("es-AR", { minimumFractionDigits: 2 })}`
+    : `${moneyBag} Total: $${originalTotal.toLocaleString("es-AR", { minimumFractionDigits: 2 })}`;
 
   return (
     `Hola Marie! ${wave} Quiero realizar el siguiente pedido:\n\n` +
     `${clipboard} Detalle:\n\n` +
     `${itemsList}\n\n` +
-    `${moneyBag} Total: $${total.toLocaleString("es-AR", { minimumFractionDigits: 2 })}\n\n` +
+    `${totalLine}\n\n` +
     `${bust} Nombre: ${data.customer_name}`
   );
 };
@@ -91,8 +98,15 @@ export default function Home() {
     const message = buildWhatsAppMessage(data, total);
     const whatsappUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${encodeURIComponent(message)}`;
 
+    const finalTotal = data.discount ? data.discount.final_total : total;
+
     try {
-      await createOrder({ ...data, total });
+      await createOrder({
+        ...data,
+        total: finalTotal,
+        discount_code: data.discount?.code ?? null,
+        discount_amount: data.discount?.discount_amount ?? null,
+      });
     } catch (error) {
       console.error("Error creating order:", error);
       alert("Hubo un error guardando el pedido, pero te redirigiremos a WhatsApp.");
