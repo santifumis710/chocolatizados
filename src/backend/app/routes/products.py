@@ -19,6 +19,7 @@ async def get_products(db: Session = Depends(get_db)):
     products = db.query(ProductModel).order_by(ProductModel.id).all()
     return products
 
+@router.post("", response_model=Product, dependencies=[Depends(require_admin)])
 @router.post("/", response_model=Product, dependencies=[Depends(require_admin)])
 async def create_product(product: Product, db: Session = Depends(get_db)):
     """Create a new product in DB"""
