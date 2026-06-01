@@ -100,17 +100,18 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                 </h2>
 
                 <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label className="block mb-1">ID</label>
-                        <input
-                            type="number"
-                            name="id"
-                            value={formData.id}
-                            disabled={!!product}
-                            onChange={handleChange}
-                            className={inputClass}
-                        />
-                    </div>
+                    {product && (
+                        <div className="mb-4">
+                            <label className="block mb-1 text-textLight text-sm">ID</label>
+                            <input
+                                type="number"
+                                name="id"
+                                value={formData.id}
+                                disabled
+                                className={`${inputClass} text-textLight`}
+                            />
+                        </div>
+                    )}
 
                     <div className="mb-4">
                         <label className="block mb-1">Nombre</label>

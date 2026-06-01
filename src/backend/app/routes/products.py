@@ -22,13 +22,12 @@ async def get_products(db: Session = Depends(get_db)):
 @router.post("/", response_model=Product, dependencies=[Depends(require_admin)])
 async def create_product(product: Product, db: Session = Depends(get_db)):
     """Create a new product in DB"""
-    # Check if ID exists
-    existing = db.query(ProductModel).filter(ProductModel.id == product.id).first()
-    if existing:
-        raise HTTPException(status_code=400, detail="Product with this ID already exists")
-    
+    from sqlalchemy import func
+    max_id = db.query(func.max(ProductModel.id)).scalar() or 0
+    new_id = max_id + 1
+
     new_product = ProductModel(
-        id=product.id,
+        id=new_id,
         name=product.name,
         price=product.price,
         category=product.category,
@@ -40,7 +39,7 @@ async def create_product(product: Product, db: Session = Depends(get_db)):
         is_visible=product.is_visible,
         min_quantity=product.min_quantity,
     )
-    
+
     db.add(new_product)
     db.commit()
     db.refresh(new_product)
