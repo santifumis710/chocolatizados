@@ -66,6 +66,9 @@ async def validate_discount_code(body: ValidateRequest, db: Session = Depends(ge
 
     final_total = round(body.order_total - discount_amount, 2)
 
+    dc.uses_count += 1
+    db.commit()
+
     return {
         "valid": True,
         "code": dc.code,
