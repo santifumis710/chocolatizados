@@ -1,5 +1,5 @@
 import os
-from sqlalchemy import create_engine, Column, String, Float, DateTime, JSON, Text, Integer, Boolean, UniqueConstraint
+from sqlalchemy import create_engine, Column, String, Float, DateTime, JSON, Text, Integer, Boolean, UniqueConstraint, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -69,6 +69,11 @@ class DiscountCodeModel(Base):
 def init_db():
     if engine:
         Base.metadata.create_all(bind=engine)
+        # Add columns that create_all won't add to existing tables
+        with engine.connect() as conn:
+            conn.execute(text("ALTER TABLE orders ADD COLUMN IF NOT EXISTS discount_code VARCHAR"))
+            conn.execute(text("ALTER TABLE orders ADD COLUMN IF NOT EXISTS discount_amount FLOAT"))
+            conn.commit()
         print("✅ Database initialized")
     else:
         print("⚠️ No DATABASE_URL found. Database not initialized.")
