@@ -53,8 +53,6 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [discountError, setDiscountError] = useState("");
   const [discountLoading, setDiscountLoading] = useState(false);
 
-  const effectiveTotal = discountInfo ? discountInfo.final_total : total;
-
   const handleApplyDiscount = async () => {
     if (!discountCode.trim()) return;
     setDiscountError("");
