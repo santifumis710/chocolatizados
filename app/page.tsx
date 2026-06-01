@@ -49,7 +49,7 @@ const buildWhatsAppMessage = (data: any, originalTotal: number) => {
     : `${moneyBag} Total: $${originalTotal.toLocaleString("es-AR", { minimumFractionDigits: 2 })}`;
 
   return (
-    `Hola Marie! ${wave} Quiero realizar el siguiente pedido:\n\n` +
+    `Hola Chocolatizados! ${wave} Quiero realizar el siguiente pedido:\n\n` +
     `${clipboard} Detalle:\n\n` +
     `${itemsList}\n\n` +
     `${totalLine}\n\n` +
