@@ -38,8 +38,7 @@ async def create_product(product: Product, db: Session = Depends(get_db)):
         image_url=product.image_url,
         allows_customization=product.allows_customization,
         is_visible=product.is_visible,
-        # Default fallback for new fields if not in schema yet
-        min_quantity=1 
+        min_quantity=product.min_quantity,
     )
     
     db.add(new_product)
@@ -64,7 +63,8 @@ async def update_product(product_id: int, product_update: Product, db: Session =
     product.image_url = product_update.image_url
     product.allows_customization = product_update.allows_customization
     product.is_visible = product_update.is_visible
-    
+    product.min_quantity = product_update.min_quantity
+
     db.commit()
     db.refresh(product)
     return product

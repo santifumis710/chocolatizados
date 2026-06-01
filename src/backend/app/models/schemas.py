@@ -16,3 +16,4 @@ class Product(BaseModel):
     image_url: Optional[str] = None
     allows_customization: bool = False
     is_visible: bool = True
+    min_quantity: int = 1
