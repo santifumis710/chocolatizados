@@ -150,6 +150,16 @@ export const OrdersTable = () => {
                                                         </li>
                                                     ))}
                                                 </ul>
+                                                {order.discount_code && (
+                                                    <div className="text-green-700">
+                                                        <strong>Descuento ({order.discount_code}):</strong>{" "}
+                                                        -${order.discount_amount.toLocaleString("es-AR", { minimumFractionDigits: 2 })}
+                                                        {" · "}
+                                                        <span className="text-gray-500 line-through">
+                                                            ${(order.total + order.discount_amount).toLocaleString("es-AR", { minimumFractionDigits: 2 })}
+                                                        </span>
+                                                    </div>
+                                                )}
                                                 {order.delivery_address && (
                                                     <div><strong>Dirección:</strong> {order.delivery_address}</div>
                                                 )}
