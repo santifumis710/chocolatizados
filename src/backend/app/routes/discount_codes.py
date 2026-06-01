@@ -44,6 +44,7 @@ router = APIRouter(prefix="/api/discount-codes", tags=["discount_codes"])
 
 
 @router.post("/validate")
+@router.post("/validate/")
 async def validate_discount_code(body: ValidateRequest, db: Session = Depends(get_db)):
     dc = db.query(DiscountCodeModel).filter(
         DiscountCodeModel.code == body.code.strip().upper()
@@ -75,11 +76,13 @@ async def validate_discount_code(body: ValidateRequest, db: Session = Depends(ge
     }
 
 
+@router.get("", response_model=List[DiscountCodeOut], dependencies=[Depends(require_admin)])
 @router.get("/", response_model=List[DiscountCodeOut], dependencies=[Depends(require_admin)])
 async def get_discount_codes(db: Session = Depends(get_db)):
     return db.query(DiscountCodeModel).all()
 
 
+@router.post("", response_model=DiscountCodeOut, dependencies=[Depends(require_admin)])
 @router.post("/", response_model=DiscountCodeOut, dependencies=[Depends(require_admin)])
 async def create_discount_code(body: DiscountCodeCreate, db: Session = Depends(get_db)):
     existing = db.query(DiscountCodeModel).filter(

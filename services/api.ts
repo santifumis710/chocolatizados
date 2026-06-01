@@ -139,7 +139,7 @@ export const validateDiscountCode = async (code: string, orderTotal: number) => 
 
 export const fetchDiscountCodes = async () => {
     const res = await adminFetch(`${API_URL}/api/discount-codes/`);
-    if (!res.ok) throw new Error('Failed to fetch discount codes');
+    if (!res.ok) throw new Error(`Error ${res.status} al cargar códigos de descuento`);
     return res.json();
 };
 

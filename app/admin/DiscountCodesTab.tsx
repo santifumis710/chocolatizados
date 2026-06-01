@@ -41,8 +41,8 @@ export function DiscountCodesTab() {
     try {
       const data = await fetchDiscountCodes();
       setCodes(data);
-    } catch {
-      alert("Error cargando códigos");
+    } catch (err: any) {
+      alert(`Error cargando códigos: ${err.message}`);
     } finally {
       setLoading(false);
     }
