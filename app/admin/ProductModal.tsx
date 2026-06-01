@@ -39,7 +39,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
         try {
             const fd = new FormData();
             fd.append("file", file);
-            const res = await fetch("/api/upload", { method: "POST", body: fd });
+            const res = await fetch("/upload-image", { method: "POST", body: fd });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Error subiendo imagen");
             setFormData((prev) => ({ ...prev, image_url: data.url }));
