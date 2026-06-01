@@ -79,8 +79,8 @@ export default function AdminDashboard() {
             }
             setIsModalOpen(false);
             loadProducts();
-        } catch (e) {
-            alert('Error guardando producto');
+        } catch (e: any) {
+            alert(`Error guardando producto: ${e.message}`);
             console.error(e);
         }
     };

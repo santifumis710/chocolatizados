@@ -89,7 +89,17 @@ export const ProductModal: React.FC<ProductModalProps> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSave(formData);
+        const price = Number(formData.price);
+        const minQty = Number(formData.min_quantity);
+        if (!Number.isFinite(price) || price <= 0) {
+            alert("El precio debe ser un número mayor a 0");
+            return;
+        }
+        onSave({
+            ...formData,
+            price,
+            min_quantity: Number.isFinite(minQty) && minQty >= 1 ? minQty : 1,
+        });
     };
 
     return (

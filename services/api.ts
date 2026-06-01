@@ -54,12 +54,28 @@ export const fetchCategories = async () => {
     return res.json();
 };
 
+const extractError = async (res: Response, fallback: string): Promise<string> => {
+    try {
+        const data = await res.json();
+        if (typeof data?.detail === 'string') return data.detail;
+        if (Array.isArray(data?.detail)) {
+            // FastAPI/Pydantic validation errors
+            return data.detail
+                .map((e: any) => `${(e.loc || []).join('.')}: ${e.msg}`)
+                .join(' | ');
+        }
+        return `${fallback} (HTTP ${res.status})`;
+    } catch {
+        return `${fallback} (HTTP ${res.status})`;
+    }
+};
+
 export const createProduct = async (product: any) => {
     const res = await adminFetch(`${API_URL}/api/products/`, {
         method: 'POST',
         body: JSON.stringify(product),
     });
-    if (!res.ok) throw new Error('Failed to create product');
+    if (!res.ok) throw new Error(await extractError(res, 'Error creando producto'));
     return res.json();
 };
 
@@ -68,7 +84,7 @@ export const updateProduct = async (id: number, product: any) => {
         method: 'PUT',
         body: JSON.stringify(product),
     });
-    if (!res.ok) throw new Error('Failed to update product');
+    if (!res.ok) throw new Error(await extractError(res, 'Error actualizando producto'));
     return res.json();
 };
 
