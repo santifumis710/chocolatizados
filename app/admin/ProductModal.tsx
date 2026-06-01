@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 interface Product {
     id: number;
@@ -27,6 +27,30 @@ export const ProductModal: React.FC<ProductModalProps> = ({
     onSave,
     product,
 }) => {
+    const [uploading, setUploading] = useState(false);
+    const [uploadError, setUploadError] = useState("");
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setUploadError("");
+        setUploading(true);
+        try {
+            const fd = new FormData();
+            fd.append("file", file);
+            const res = await fetch("/api/upload", { method: "POST", body: fd });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Error subiendo imagen");
+            setFormData((prev) => ({ ...prev, image_url: data.url }));
+        } catch (err: any) {
+            setUploadError(err.message);
+        } finally {
+            setUploading(false);
+            if (fileInputRef.current) fileInputRef.current.value = "";
+        }
+    };
+
     const [formData, setFormData] = useState<Product>({
         id: 0,
         name: "",
@@ -131,15 +155,38 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                     </div>
 
                     <div className="mb-4">
-                        <label className="block mb-1">Imagen URL</label>
+                        <label className="block mb-1">Imagen</label>
+                        {formData.image_url && (
+                            <img
+                                src={formData.image_url}
+                                alt="preview"
+                                className="w-24 h-24 object-cover rounded mb-2 border border-border"
+                            />
+                        )}
                         <input
                             type="text"
                             name="image_url"
                             value={formData.image_url || ""}
                             onChange={handleChange}
-                            placeholder="/images/products/..."
-                            className={inputClass}
+                            placeholder="URL de la imagen"
+                            className={`${inputClass} mb-2`}
                         />
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/jpeg,image/png,image/webp"
+                            onChange={handleImageUpload}
+                            className="hidden"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            disabled={uploading}
+                            className="px-3 py-2 border border-border rounded text-sm cursor-pointer bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {uploading ? "Subiendo..." : "📁 Subir imagen"}
+                        </button>
+                        {uploadError && <p className="text-red-600 text-sm mt-1">{uploadError}</p>}
                     </div>
 
                     <div className="mb-4">
