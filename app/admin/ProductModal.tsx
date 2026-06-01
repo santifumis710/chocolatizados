@@ -9,6 +9,7 @@ interface Product {
     category: string;
     image_url: string;
     description: string;
+    min_quantity: number;
 }
 
 interface ProductModalProps {
@@ -33,11 +34,12 @@ export const ProductModal: React.FC<ProductModalProps> = ({
         category: "Tabletas",
         image_url: "",
         description: "",
+        min_quantity: 1,
     });
 
     useEffect(() => {
         if (product) {
-            setFormData(product);
+            setFormData({ min_quantity: 1, ...product });
         } else {
             setFormData({
                 id: Date.now(),
@@ -46,6 +48,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                 category: "Tabletas",
                 image_url: "",
                 description: "",
+                min_quantity: 1,
             });
         }
     }, [product, isOpen]);
@@ -56,7 +59,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
         const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
-            [name]: name === "price" ? parseFloat(value) : value,
+            [name]: name === "price" || name === "min_quantity" ? parseFloat(value) : value,
         }));
     };
 
@@ -135,6 +138,19 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                             value={formData.image_url || ""}
                             onChange={handleChange}
                             placeholder="/images/products/..."
+                            className={inputClass}
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block mb-1">Cantidad mínima</label>
+                        <input
+                            type="number"
+                            name="min_quantity"
+                            value={formData.min_quantity}
+                            onChange={handleChange}
+                            min="1"
+                            required
                             className={inputClass}
                         />
                     </div>
