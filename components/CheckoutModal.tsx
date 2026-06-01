@@ -199,7 +199,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                         setDiscountError("");
                       }}
                       onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleApplyDiscount())}
-                      placeholder="Ej: PROMO15"
+                      placeholder="Código de descuento"
                       className="flex-1 p-4 rounded text-base font-sans box-border border border-border"
                     />
                     <button

@@ -223,7 +223,7 @@ export function DiscountCodesTab() {
                   type="text"
                   value={form.code}
                   onChange={(e) => setForm((f) => ({ ...f, code: e.target.value.toUpperCase() }))}
-                  placeholder="Ej: PROMO15"
+                  placeholder="PROMO15"
                   className="w-full p-3 border border-border rounded font-mono"
                 />
               </div>
